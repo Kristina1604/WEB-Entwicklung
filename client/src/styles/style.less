@@ -1,0 +1,57 @@
+
+@background: #e7e7e7;
+@grey: #808080;
+@dark-grey:#555555;
+@white:#FFFFFF;
+
+
+
+
+body {
+    background-color: @background;
+  }
+
+h2{
+
+  margin-top: 50px;
+  text-align: center;
+  font-family:cursive;
+  font-size:35pt;
+}
+
+#positionContainer{
+
+margin-top: 100px;
+}
+
+#positionKunde{
+  margin-right: 100px;
+}
+
+
+  #buttonKunde {
+    box-shadow: 0px 5px 10px @grey;
+    height: 100px;
+    width: 200px;
+     &:hover {
+      background-color: @dark-grey;
+      color: @white;
+    }
+    &:active {
+      box-shadow: 0px 0px 0px;
+    }
+  }
+
+  
+  #buttonBetreiber {
+    box-shadow: 0px 5px 10px @grey;
+    height: 100px;
+    width: 200px;
+    &:hover {
+      background-color: @dark-grey;
+      color: @white;
+    }
+    &:active {
+       box-shadow: 0px 0px 0px;
+    }
+  }

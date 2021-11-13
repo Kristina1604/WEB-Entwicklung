@@ -1,0 +1,39 @@
+body {
+  background-color: #e7e7e7;
+}
+h2 {
+  margin-top: 50px;
+  text-align: center;
+  font-family: cursive;
+  font-size: 35pt;
+}
+#positionContainer {
+  margin-top: 100px;
+}
+#positionKunde {
+  margin-right: 100px;
+}
+#buttonKunde {
+  box-shadow: 0px 5px 10px #808080;
+  height: 100px;
+  width: 200px;
+}
+#buttonKunde:hover {
+  background-color: #555555;
+  color: #FFFFFF;
+}
+#buttonKunde:active {
+  box-shadow: 0px 0px 0px;
+}
+#buttonBetreiber {
+  box-shadow: 0px 5px 10px #808080;
+  height: 100px;
+  width: 200px;
+}
+#buttonBetreiber:hover {
+  background-color: #555555;
+  color: #FFFFFF;
+}
+#buttonBetreiber:active {
+  box-shadow: 0px 0px 0px;
+}
