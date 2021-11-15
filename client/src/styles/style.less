@@ -55,3 +55,54 @@ margin-top: 100px;
        box-shadow: 0px 0px 0px;
     }
   }
+
+ /* 
+  * --------------------------------------------------------------- 
+  * ----------------------Grund-Layoutelemente---------------------
+  */
+
+  //Diese Variablen können beliebig angepasst werden
+  @margin-top:50px;
+  @wrapper-height:600px;
+  @wrapper-width:1000px;
+  @ueberschrift-height:100px;
+  @navleiste-width:200px;
+  @rand-aussen:2px;
+  @rand-innen:1px;
+  @rand-farbe: black;
+
+
+  #wrapper {
+    //Alles umschließendes DIV
+    margin: auto;
+    margin-top:@margin-top;
+    height: @wrapper-height;
+    width: @wrapper-width;
+    box-sizing: border-box;
+    border: @rand-aussen solid @rand-farbe;
+  }
+  #ueberschrift {
+    //Oberer horizontaler Balken für Überschrift
+    height: @ueberschrift-height - @rand-aussen - @rand-innen;
+    width: @wrapper-width - (2*@rand-aussen);
+    box-sizing: border-box;
+    border-bottom: @rand-innen solid @rand-farbe;
+  }
+  #inhalt {
+    //Umschließendes unteres Element. Enthält Navleiste und Contentfeld
+    display: flex;
+    height: @wrapper-height - @ueberschrift-height - @rand-innen;
+    width: @wrapper-width - (2*@rand-aussen);
+  }
+  #tableiste {
+    //Navleiste links
+    height: @wrapper-height - @ueberschrift-height - @rand-innen;
+    width: @navleiste-width;
+    box-sizing: border-box;
+    border-right: @rand-innen solid @rand-farbe;
+  }
+  #formular {
+    //Contentbereich für z.B Inputfelder, Listen und vielem mehr
+    height: @wrapper-height - @ueberschrift-height - @rand-innen;
+    width: @wrapper-width - @navleiste-width
+  }
