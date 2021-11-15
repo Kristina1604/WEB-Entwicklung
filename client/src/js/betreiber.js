@@ -24,11 +24,11 @@ function loadEmptyLayout () {
   let wrapper = createElement('div',{id:"wrapper",class:"justify-content-center"})
   let ueberschrift = createElement('div',{id:"ueberschrift"});
   let inhalt = createElement('div',{id:"inhalt"})
-  let tableiste = createElement('div',{id:"tableiste"});
+  let navleiste = createElement('div',{id:"navleiste"});
   let formular = createElement('div',{id:"formular"});
 
   //und zusammenstecken
-  addElement(inhalt,tableiste);
+  addElement(inhalt,navleiste);
   addElement(inhalt,formular);
   addElement(wrapper,ueberschrift);
   addElement(wrapper,inhalt);
