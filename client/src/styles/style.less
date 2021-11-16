@@ -58,7 +58,7 @@ margin-top: 100px;
 
  /* 
   * --------------------------------------------------------------- 
-  * ----------------------Grund-Layoutelemente---------------------
+  * -------------------------Layoutelemente------------------------
   */
 
   //Diese Variablen können beliebig angepasst werden
@@ -106,4 +106,68 @@ margin-top: 100px;
     //Contentbereich für z.B Inputfelder, Listen und vielem mehr
     height: @wrapper-height - @ueberschrift-height - @rand-innen;
     width: @wrapper-width - @navleiste-width
+  }
+
+  //Die beiden Hauptbuttons 'Betreiber' und 'Kunde'
+  .primaryButton {
+    width:100%;
+    height:3em;
+    background-color: @dark-grey;
+    text-align: center;
+    margin-bottom:1px;
+    color:white;
+  }
+  .primaryButton:hover{
+    background-color: @white;
+    color:@dark-grey;
+  }
+  .primaryButton:first-child{
+    margin-top: 1px;
+  }
+  //Geöffneter Hauptbutton
+  .openPrimaryButton {
+    background-color: @grey;
+  }
+
+  //Das Anklicken der <p>-Tags zu verhindern macht den js-Code etwas einfachen
+  //(toggleMenu() kann dann einfacher herausfinden, welcher Hauptbutton gedrückt wurde)
+  //Ansonsten keine Funktion
+  #navleiste > div > p  {
+    pointer-events: none;
+  }
+
+
+  //Unterbuttons
+  .oSubButton, .cSubButton {
+    text-align: center;
+    margin-bottom:1px;
+    color:@dark-grey;
+    width:100%;
+    background-color: @white;
+  }
+  .oSubButton:first-child, .cSubButton:first-child {
+    
+    margin-top: 1px;
+  }
+  .oSubButton:hover, .cSubButton:hover {
+    background-color: @dark-grey;
+    color:@white
+  }
+
+
+  
+
+
+  //Style für Unterputtons + Übergang
+  @button-transitionTime: .05s;
+  .inactive {
+    height: 0;
+    display: hidden;
+    font-size: 0;
+    transition: height @button-transitionTime
+  }
+  .active {
+    height: 2em;
+    font-size: 100%;
+    transition: height @button-transitionTime, font-size @button-transitionTime;
   }

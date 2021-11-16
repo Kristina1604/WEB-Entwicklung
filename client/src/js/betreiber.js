@@ -1,55 +1,55 @@
-const button = document.getElementById('buttonBetreiber');
-button.addEventListener('click', loadOperator);
+//Dateiname betreiber.js ist nicht mehr ganz passend...
 
 
+//Eventlistener für die Hauptbuttons in der Navbar
+const operatorButton = document.getElementById('operatorButton');
+operatorButton.addEventListener('click', toggleMenu,);
+const customerButton = document.getElementById('customerButton');
+customerButton.addEventListener('click', toggleMenu);
+
+//Variablen, die den aktuellen Zustand der beiden 'Dropdowns' erfassen
+// c = customer
+// o = operator
+let oOpen = false;
+let cOpen = false;
 
 /**
- * Wird aufgerufen, wenn Betreiberansicht geladen werden soll
+ * Öffnet und schließt die beiden Dropdowns in der Navleiste
+ * @param {Event} event Event welches Informationen über den 'Klick' des Benutzers enthält
  */
-function loadOperator () {
-  //GoogleÜbersetzer => Betreiber = Operator
-  loadEmptyLayout();
+function toggleMenu(event) {
+
+  let c_or_o = event.originalTarget.id.charAt(0); // Evaluiert zu 'c' bei Klick auf Kunde, und zu 'o' bei Klick auf Betreiber
+  let open = c_or_o == "c" ? cOpen : oOpen; //Übernimmt Booleanwert (auf=true,zu=false) des entsprechenden Dropdowns
+  let subButtons = document.getElementsByClassName(`${c_or_o}SubButton`) //HTMLCollection aller Dropdownitems des entsprechenden Dropdownmenüs
+
+  //HTMLCollection erlaubt kein forEach(), deshalb wandle ich es in ein normales Array um
+  let subButtonsArray = [];
+  for (let i = 0 ; i < subButtons.length ; i++) {
+    subButtonsArray.push(subButtons.item(i))
+  }
+
+  if (open) {
+    //Das angeklickte Menü ist offen => Menü schließen
+    subButtonsArray.forEach(i => {
+      removeClass(i,"active")
+      addClass(i,"inactive")
+    })
+  } else {
+    //Das angeklickte Menü ist geschlossen => Menü öffnen
+    subButtonsArray.forEach(i => {
+      removeClass(i,"inactive")
+      addClass(i,"active")
+    })
+  }
+
+  //Die richtige Booleanvariable muss noch geflipt werden
+  c_or_o == "c" ? cOpen = !cOpen : oOpen = !oOpen;
+
+  //Ein geöffneter Hauptbutton soll etwas heller als ein geschlossener sein
+  let primaryButton = document.getElementById(c_or_o == "c" ? "customerButton" : "operatorButton");
+   open ? removeClass(primaryButton,"openPrimaryButton") :  addClass(primaryButton,"openPrimaryButton"); 
 }
-
-/**
- * Läd leeres Seitenlayout
- */
-function loadEmptyLayout () {
-  
-  //Seite komplett leeren
-  let body = document.getElementById("body");
-  clearElement(body)
-
-  //Neue Elemente erzeugen
-  let wrapper = createElement('div',{id:"wrapper",class:"justify-content-center"})
-  let ueberschrift = createElement('div',{id:"ueberschrift"});
-  let inhalt = createElement('div',{id:"inhalt"})
-  let navleiste = createElement('div',{id:"navleiste"});
-  let formular = createElement('div',{id:"formular"});
-
-  //und zusammenstecken
-  addElement(inhalt,navleiste);
-  addElement(inhalt,formular);
-  addElement(wrapper,ueberschrift);
-  addElement(wrapper,inhalt);
-  //Am Ende alles zum body hinzufügen
-  addElement(body,wrapper);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* 
