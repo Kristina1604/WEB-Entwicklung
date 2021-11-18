@@ -2,9 +2,9 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database.js');
 
-// model festlegen
+// 3 Tabellen in DB anlegen
 
-const Blogg = db.define('kino', {
+const Kinosaal = db.define('kino', {
   kinoname: {
     type: Sequelize.STRING
   },
@@ -13,7 +13,11 @@ const Blogg = db.define('kino', {
   },
   sitze: {
     type: Sequelize.INTEGER
-  },
+  }
+});
+
+const Vorstellung = db.define('vorstellung', {
+
   datum: {
     type: Sequelize.DATE
   },
@@ -25,7 +29,11 @@ const Blogg = db.define('kino', {
   },
   filmname: {
     type: Sequelize.STRING
-  },
+  }
+});
+
+const Reservierung = db.define('reservierung', {
+
   vorstellung: {
     type: Sequelize.STRING
   },
@@ -37,10 +45,22 @@ const Blogg = db.define('kino', {
   }
 });
 
-// Synchronisation von model und DB
+// Synchronisation von Tabellen und DB
 
-Blogg.sync({
+Kinosaal.sync({
   alter: true
 });
 
-module.exports = Blogg;
+Vorstellung.sync({
+  alter: true
+});
+
+Reservierung.sync({
+  alter: true
+});
+
+// Exportieren der Tabellen damit sie in main.js eingebunden werden können
+
+module.exports = Kinosaal;
+module.exports = Vorstellung;
+module.exports = Reservierung;

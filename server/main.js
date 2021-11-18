@@ -12,7 +12,7 @@ api.use(express.static('_dist'));
 // Database
 const db = require('../config/database.js');
 
-const Kino = require('../model/Kino');
+const Model = require('../model/Model');
 
 // Verbindung zur DB testen mit Hilfe der Methode .authenticate()
 db.authenticate().then(function () {
@@ -21,6 +21,23 @@ db.authenticate().then(function () {
   console.log('connection failed: ' + error);
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Starten des Servers an Port 8080
 api.listen(PORT, function () {
   console.log(`Server running on port: ${PORT}`);
 });
