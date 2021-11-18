@@ -144,7 +144,7 @@ function clearElement (element) {
 
 
 /**
- * Erzeugt neues Element, optional direkt mit Klassen, Styles und sonstigen Attributen
+ * Erzeugt neues Element, optional direkt mit Klassen, Styles oder sonstigen Attributen
  * @param {String} tagName Name des Element-Tags
  * @param {Object} attributes OPTIONAL z.B {class:"d-flex row",style:"backgroundColor:red;"}
  * @returns {Element} newElement Das neue Element
@@ -153,19 +153,19 @@ function createElement (tagName,attributes) {
   let newElement = document.createElement(tagName);
   for (let prop in attributes) {
     switch (prop) {
-    case "class":
-      for (let singleClass of attributes[prop].split(" ")) {
-        addClass(newElement,singleClass)
-      }
-      break;
-    case "style":
-      setStyle(newElement,attributes[prop])
-      break;
-    case "text":
-      setText(newElement,attributes[prop])
-      break;
-    default:
-      setAttribute(newElement, prop, attributes[prop]);
+      case "class":
+        for (let singleClass of attributes[prop].split(" ")) {
+          addClass(newElement,singleClass)
+        }
+        break;
+      case "style":
+        setStyle(newElement,attributes[prop])
+        break;
+      case "text":
+        setText(newElement,attributes[prop])
+        break;
+      default:
+        setAttribute(newElement, prop, attributes[prop]);
     }
   }
   return newElement;
