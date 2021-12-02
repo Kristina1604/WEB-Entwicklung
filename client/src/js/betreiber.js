@@ -112,7 +112,7 @@ const FORMULAR_TEMPLATES = {
  * @param {Event} event Event welches Informationen über den 'Klick' des Benutzers enthält
  */
 function toggleMenu(event) {
-  let c_or_o = event.originalTarget.id.charAt(0); // Evaluiert zu 'c' bei Klick auf Kunde, und zu 'o' bei Klick auf Betreiber
+  let c_or_o = event.target.id.charAt(0); // Evaluiert zu 'c' bei Klick auf Kunde, und zu 'o' bei Klick auf Betreiber
   let open = c_or_o == "c" ? C_OPEN : O_OPEN; //Übernimmt Booleanwert (auf=true,zu=false) des entsprechenden Dropdowns
   let subButtons = document.getElementsByClassName(`${c_or_o}SubButton`) //HTMLCollection aller Dropdownitems des entsprechenden Dropdownmenüs
 
@@ -151,7 +151,7 @@ function toggleMenu(event) {
  */
 function switchSide(event) {
   //Seite, die angeklickt wurde
-  let newSite = event.originalTarget.id;
+  let newSite = event.target.id;
 
   //Klick auf Seite, die bereits offen ist, hat keine Wirkung
   if (newSite == CURRENTSIDE){
