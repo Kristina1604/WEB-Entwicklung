@@ -71,15 +71,16 @@ margin-top: 100px;
   @navbar-width:200px;
   @border-outer:2px;
   @border-inner:1px;
-  @border-color: rgb(255, 166, 0);
-  @boxShadow: 0px 5px 10px rgb(255, 166, 0);
+  @border-color: white;
+  //@boxShadow: 0px 0px 0px rgb(255, 166, 0);
+  @boxShadow:none;
 
-
-  @primaryButtons: rgb(255, 199, 44);
-  @primaryButton-hover: rgb(255, 206, 70);
-  @primaryButtonFont: black;
-  @primaryButtonFont-hover:white;
+  @primaryButtons: black;
+  @primaryButton-hover: rgb(201, 169, 81);
+  @primaryButtonFont: white;
+  @primaryButtonFont-hover:black;
   @primaryButtonOpen:rgb(187, 146, 32);
+  @primaryButtonOpenFont:black;
 
 
   @subButtons: rgb(255, 210, 85);
@@ -90,7 +91,7 @@ margin-top: 100px;
   //@subButtonOpen-hover: 0;
 
   @inputFieldColor: rgb(255, 244, 223);
-  @inputFieldFont: rgb(255, 166, 0);
+  @inputFieldFont: black;//rgb(255, 166, 0);
 
 
 
@@ -139,10 +140,14 @@ margin-top: 100px;
     text-align: center;
     margin-bottom:1px;
     color: @primaryButtonFont;
+    box-sizing: border-box;
+    border: 2px white;
+    box-shadow: none;
   }
   .primaryButton:hover{
     background-color: @primaryButton-hover;
     color:@primaryButtonFont-hover;
+    box-shadow: none;
   }
   .primaryButton:first-child{
     margin-top: 1px;
@@ -150,6 +155,7 @@ margin-top: 100px;
   //Geöffneter Hauptbutton
   .openPrimaryButton {
     background-color: @primaryButtonOpen;
+    color: @primaryButtonOpenFont;
   }
 
   //Das Anklicken der <p>-Tags zu verhindern macht den js-Code etwas einfachen
