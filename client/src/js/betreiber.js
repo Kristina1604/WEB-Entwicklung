@@ -189,14 +189,14 @@ function switchSide(event) {
     let input;
     switch (inputJSON.type) {
       case "text":
-        input = createElement("input",{class:"form-control", type:"text", id:inputID, placeholder:inputJSON.placeholder});
+        input = createElement("input",{class:"form-control inputField", type:"text", id:inputID, placeholder:inputJSON.placeholder});
         break;
       case "select":
-        input = createElement("select",{class:"form-control", id:inputID});
+        input = createElement("select",{class:"form-control inputField", id:inputID});
         inputJSON.options.forEach(option => addElement(input,createElement("option",{text:option})))
         break;
       case "number":
-        input = createElement("input",{class:"form-control",type:"number",id:inputID});
+        input = createElement("input",{class:"form-control inputField",type:"number",id:inputID});
         break;
     }
     addElement(wrapper,label);

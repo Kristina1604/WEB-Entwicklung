@@ -1,5 +1,6 @@
 
-@background: #e7e7e7;
+@background: #000;
+@fontColor: #fff; 
 @grey: #808080;
 @dark-grey:#555555;
 @white:#FFFFFF;
@@ -66,11 +67,31 @@ margin-top: 100px;
   @margin-top:50px;
   @wrapper-height:600px;
   @wrapper-width:1000px;
-  @ueberschrift-height:100px;
-  @navleiste-width:200px;
-  @rand-aussen:2px;
-  @rand-innen:1px;
-  @rand-farbe: black;
+  @caption-height:100px;
+  @navbar-width:200px;
+  @border-outer:2px;
+  @border-inner:1px;
+  @border-color: rgb(255, 166, 0);
+  @boxShadow: 0px 5px 10px rgb(255, 166, 0);
+
+
+  @primaryButtons: rgb(255, 199, 44);
+  @primaryButton-hover: rgb(255, 206, 70);
+  @primaryButtonFont: black;
+  @primaryButtonFont-hover:white;
+  @primaryButtonOpen:rgb(187, 146, 32);
+
+
+  @subButtons: rgb(255, 210, 85);
+  @subButtons-hover: rgb(255, 223, 134);
+  @subButtonFont: black;
+  @subButtonFont-hover: white;
+  //@subButtonOpen: 0;
+  //@subButtonOpen-hover: 0;
+
+  @inputFieldColor: rgb(255, 244, 223);
+  @inputFieldFont: rgb(255, 166, 0);
+
 
 
   #wrapper {
@@ -80,53 +101,55 @@ margin-top: 100px;
     height: @wrapper-height;
     width: @wrapper-width;
     box-sizing: border-box;
-    border: @rand-aussen solid @rand-farbe;
+    border: @border-outer solid @border-color;
+    box-shadow: @boxShadow;
+    color: @fontColor;
   }
   #ueberschrift {
     //Oberer horizontaler Balken für Überschrift
-    height: @ueberschrift-height - @rand-aussen - @rand-innen;
-    width: @wrapper-width - (2*@rand-aussen);
+    height: @caption-height - @border-outer - @border-inner;
+    width: @wrapper-width - (2*@border-outer);
     box-sizing: border-box;
-    border-bottom: @rand-innen solid @rand-farbe;
+    border-bottom: @border-inner solid @border-color;
   }
   #inhalt {
     //Umschließendes unteres Element. Enthält Navleiste und Contentfeld
     display: flex;
-    height: @wrapper-height - @ueberschrift-height - @rand-innen;
-    width: @wrapper-width - (2*@rand-aussen);
+    height: @wrapper-height - @caption-height - @border-inner;
+    width: @wrapper-width - (2*@border-outer);
   }
   #navleiste {
     //Navleiste links
-    height: @wrapper-height - @ueberschrift-height - @rand-innen;
-    width: @navleiste-width;
+    height: @wrapper-height - @caption-height - @border-inner;
+    width: @navbar-width;
     box-sizing: border-box;
-    border-right: @rand-innen solid @rand-farbe;
+    border-right: @border-inner solid @border-color;
   }
   #formular {
     //Contentbereich für z.B Inputfelder, Listen und vielem mehr
-    height: @wrapper-height - @ueberschrift-height - @rand-innen;
-    width: @wrapper-width - @navleiste-width
+    height: @wrapper-height - @caption-height - @border-inner;
+    width: @wrapper-width - @navbar-width
   }
 
   //Die beiden Hauptbuttons 'Betreiber' und 'Kunde'
   .primaryButton {
     width:100%;
     height:3em;
-    background-color: @dark-grey;
+    background-color: @primaryButtons;
     text-align: center;
     margin-bottom:1px;
-    color:white;
+    color: @primaryButtonFont;
   }
   .primaryButton:hover{
-    background-color: @white;
-    color:@dark-grey;
+    background-color: @primaryButton-hover;
+    color:@primaryButtonFont-hover;
   }
   .primaryButton:first-child{
     margin-top: 1px;
   }
   //Geöffneter Hauptbutton
   .openPrimaryButton {
-    background-color: @grey;
+    background-color: @primaryButtonOpen;
   }
 
   //Das Anklicken der <p>-Tags zu verhindern macht den js-Code etwas einfachen
@@ -141,19 +164,23 @@ margin-top: 100px;
   .oSubButton, .cSubButton {
     text-align: center;
     margin-bottom:1px;
-    color:@dark-grey;
+    color:@subButtonFont;
     width:100%;
-    background-color: @white;
+    background-color: @subButtons;
   }
   .oSubButton:first-child, .cSubButton:first-child {
     
     margin-top: 1px;
   }
   .oSubButton:hover, .cSubButton:hover {
-    background-color: @dark-grey;
-    color:@white
+    background-color: @subButtons-hover;
+    color:@subButtonFont-hover;
   }
 
+  .inputField {
+    background-color: @inputFieldColor;
+    color: @inputFieldFont;  
+  }
 
   
 
