@@ -16,7 +16,7 @@ const Kinosaal = db.define('kino', {
 const Vorstellung = db.define('vorstellung', {
 
   datum: {
-    type: Sequelize.DATE
+    type: Sequelize.DATEONLY
   },
   uhrzeit: {
     type: Sequelize.TIME
@@ -56,8 +56,8 @@ Reservierung.sync({
   alter: true
 });
 
-// Exportieren der Tabellen damit sie in main.js eingebunden werden können
+// Exportieren der Tabellen damit in main.js darauf zu gegriffen werden kann
 
-module.exports = Kinosaal;
-module.exports = Vorstellung;
-module.exports = Reservierung;
+exports.Kinosaal = Kinosaal;
+exports.Vorstellung = Vorstellung;
+exports.Reservierung = Reservierung;

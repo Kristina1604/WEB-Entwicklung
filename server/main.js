@@ -1,13 +1,13 @@
 // load express module
-const express = require('express');
+const Express = require('express');
 
 // Initialisierung des express Moduls in der Variable api
-const api = new express();
+const api = new Express();
 
 const PORT = 8080;
 
 // statische Dateien bereit stellen, mit der Middelwarefunktion express.static
-api.use(express.static('_dist'));
+api.use(Express.static('_dist'));
 
 // Database
 const db = require('../config/database.js');
@@ -55,9 +55,40 @@ api.post('/addReservierung', function (req, res) {
   console.log(req.body);
 
   Model.Reservierung.create({
+
     vorstellung: req.body.filmtitel,
     tickets: req.body.sitzplätze,
     kundenname: req.body.nameKunde
+  });
+});
+
+// Berechnung der Seite bei max-height
+api.get('/api/:page', function (req, res) {
+  const LIMIT = 3;
+
+  const num = req.params.page;
+  Model.Vorstellung.findAndCountAll({
+    offset: (num - 1) * LIMIT,
+    limit: LIMIT
+  }).then(function (vorstellungs) {
+    res.json(vorstellungs);
+  }).catch(function (error) {
+    console.log(error);
+  });
+});
+
+// Berechnung der Seite bei height: 600px
+api.get('/api/medium/:page', function (req, res) {
+  const LIMIT = 2;
+
+  const num = req.params.page;
+  Model.Vorstellung.findAndCountAll({
+    offset: (num - 1) * LIMIT,
+    limit: LIMIT
+  }).then(function (vorstellungs) {
+    res.json(vorstellungs);
+  }).catch(function (error) {
+    console.log(error);
   });
 });
 
