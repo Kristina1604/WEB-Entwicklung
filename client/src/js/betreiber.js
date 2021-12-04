@@ -41,7 +41,7 @@ let CURRENTSIDE = SITE.EMPTY;
 //Daten zum Laden eines Formulars. Property-Keys müssen IDs der zugehörgen Buttons / Enumvariable SITE entsprechen 
 const FORMULAR_TEMPLATES = {
   ticketsReservieren : {
-    title: "Ticketbestellung",
+    buttonId: "ticketsReservieren",
     inputs: [
       {
         description : "Name",
@@ -63,7 +63,7 @@ const FORMULAR_TEMPLATES = {
     ]
   },
   kinosaalAnlegen : {
-    title: "Kinosaal anlegen",
+    buttonId: "kinosaalAnlegen",
     inputs: [
       {
         description : "Name",
@@ -84,7 +84,7 @@ const FORMULAR_TEMPLATES = {
     ]
   },
   vorstellungAnlegen : {
-    title: "Vorstellung anlegen",
+    buttonId: "vorstellungAnlegen",
     inputs: [
       {
         description : "Name",
@@ -181,8 +181,7 @@ function switchSide(event) {
   let idCounter = 0; //Zählvariable, um eindeutige IDs generieren zu können
   //Erstellt einzelnen Inputabschnitt (Beschreibung des Inputs und Input selbst)
   let createFormElement = function (inputJSON) {
-    const inputID = `${json.title}-input-${idCounter}`
-    idCounter++;
+    const inputID = `input-${idCounter}`
 
     let wrapper = createElement("div",{class:"form-group"});
     let label = createElement("label",{for:inputID, text:inputJSON.description});
@@ -199,6 +198,7 @@ function switchSide(event) {
         input = createElement("input",{class:"form-control inputField",type:"number",id:inputID});
         break;
     }
+    idCounter++;
     addElement(wrapper,label);
     addElement(wrapper,input);
     return wrapper;
@@ -207,9 +207,10 @@ function switchSide(event) {
   //<form>-Element erstellen und füllen
   let form = createElement("form",{class:"p-4",id:"form"});
   for (let inputJSON of json.inputs) {
-    let inputElement = createFormElement(inputJSON);
     addElement(form,createFormElement(inputJSON));
   }
+  let submitButton = createElement("button", {text:"Absenden", type:'button', id:`submitButton-${json.buttonId}`});
+  addElement(form,submitButton)
   return form;
 }
 
