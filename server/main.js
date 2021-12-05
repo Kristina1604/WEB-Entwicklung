@@ -1,13 +1,13 @@
 // load express module
-const Express = require('express');
+const express = require('express');
 
-// Initialisierung des express Moduls in der Variable api
-const api = new Express();
+// erzeugen eines application objects durch den Aufruf der top level function von express
+const api = express();
 
 const PORT = 8080;
 
 // statische Dateien bereit stellen, mit der Middelwarefunktion express.static
-api.use(Express.static('_dist'));
+api.use(express.static('_dist'));
 
 // Database
 const db = require('../config/database.js');
@@ -77,9 +77,24 @@ api.get('/api/:page', function (req, res) {
   });
 });
 
-// Berechnung der Seite bei height: 600px
+// Berechnung der Seite bei min-height: 300px
 api.get('/api/medium/:page', function (req, res) {
   const LIMIT = 2;
+
+  const num = req.params.page;
+  Model.Vorstellung.findAndCountAll({
+    offset: (num - 1) * LIMIT,
+    limit: LIMIT
+  }).then(function (vorstellungs) {
+    res.json(vorstellungs);
+  }).catch(function (error) {
+    console.log(error);
+  });
+});
+
+// Neuberechnung der Seite bei min-height 100px
+api.get('/api/small/:page', function (req, res) {
+  const LIMIT = 1;
 
   const num = req.params.page;
   Model.Vorstellung.findAndCountAll({
