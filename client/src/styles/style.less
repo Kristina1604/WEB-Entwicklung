@@ -204,3 +204,50 @@ margin-top: 100px;
     font-size: 100%;
     transition: height @button-transitionTime, font-size @button-transitionTime;
   }
+
+
+ //--------------------------------------------------------------- 
+ //-------------------------Popup-Ansicht-------------------------
+ //---------------------------------------------------------------
+
+  //Ausgrauendes Hintergrundelement
+  .blurPage {
+    margin: 0;
+    width:100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    top:0;
+    left: 0;
+  }
+
+
+  //-----------------------------Popup-----------------------------
+
+  //Hauptwrapper
+  .popupWrapper {
+    position: absolute;
+    width:400px;
+    height:150px;
+    background-color: white;
+    border-radius: .25em;
+  }
+  //Einzelteile
+  .popupHeader {
+    width:400px;
+    height:50px;
+  }
+  .popupText {
+    width:400px;
+    height:57px;
+    text-align: center;
+  }
+
+  .popupFooter {
+    width:400px;
+    height:43px;
+  }
+  .acceptButton {
+    float: right;
+    margin-right: 5px;
+  }
