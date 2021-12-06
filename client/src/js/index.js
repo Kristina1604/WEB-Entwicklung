@@ -51,7 +51,6 @@ function queryFunction (y) {
 
         containerButtons.appendChild(button);
       }
-      // containerButtons.style.textAlign = 'center';
 
       document.body.appendChild(containerButtons);
 
@@ -130,7 +129,6 @@ function queryFunction (y) {
 
         containerButtons.appendChild(button);
       }
-      // containerButtons.style.textAlign = 'center';
 
       document.body.appendChild(containerButtons);
 
@@ -216,7 +214,6 @@ function queryFunction1 (x) {
 
         containerButtons.appendChild(button);
       }
-      // containerButtons.style.textAlign = 'center';
 
       document.body.appendChild(containerButtons);
 
