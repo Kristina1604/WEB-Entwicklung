@@ -77,7 +77,7 @@ api.get('/api/:page', function (req, res) {
   });
 });
 
-// Berechnung der Seite bei min-height: 300px
+// Berechnung der Seite bei max-height: 600px
 api.get('/api/medium/:page', function (req, res) {
   const LIMIT = 2;
 
