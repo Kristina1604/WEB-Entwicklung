@@ -2,9 +2,9 @@
 const express = require('express');
 
 // Initialisierung des express Moduls in der Variable api
-const api = new express();
+const api = express();
 
-const PORT = 8080; 
+const PORT = 8080;
 
 // statische Dateien bereit stellen, mit der Middelwarefunktion express.static
 api.use(express.static('_dist'));
