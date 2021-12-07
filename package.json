@@ -3,23 +3,25 @@
   "version": "1.0.0",
   "description": "Hausarbeit Web-Entwicklung",
   "main": "index.js",
-  "author": "K. Heinz",
+  "author": "Kristina Heinz",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kristina1604/WEB-Entwicklung.git"
+  },
   "scripts": {
-    "lint": "semistandard client/src/js/**.js && semistandard server/main.js",
+    "lint": "echo '=> linting files' && semistandard client/src/js/**.js && semistandard server/main.js",
     "html": "echo '=> creating static html files' && mkdir _dist && cp client/src/index.html _dist/",
     "css": "echo '=> converting less to css' &&  lessc client/src/styles/style.less _dist/styles/style.css",
-    "js": "echo '=> making js files ready for browser' && browserify client/src/js/kunde.js client/src/js/betreiber.js -o _dist/js/main.js",
-    "img": "npm run html && cp client/src/image/bild.jpg _dist/image",
+    "js": "echo '=> making js files ready for browser' && browserify client/src/js/index.js -o _dist/js/main.js",
     "minify": "echo '=> minify all ressources' && terser _dist/js/main.js -o _dist/js/main.js && css-minify -d _dist/styles/ -o _dist/styles/",
     "clean": "echo '=> cleaning project' && rm -rf node_modules && rm -rf _dist && mkdir _dist",
-    "build": "echo '=> building project' && rm -r _dist && npm run html &&  npm run css && npm run js && npm run minify",
+    "build": "echo '=> building project' && npm run lint && rm -r _dist && npm run html &&  npm run css && npm run js && npm run minify",
     "debug": "echo '=> building debug project' && npm run lint && rm -r _dist && npm run html && npm run css && npm run js",
     "start": "echo '=> starting server' && node server/main.js"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "mysql2": "^2.3.3-rc.0",
     "sequelize": "^6.9.0"
   },
   "devDependencies": {
