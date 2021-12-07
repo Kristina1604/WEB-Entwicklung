@@ -39,7 +39,7 @@ function queryFunction (y) {
       }
 
       const containerButtons = document.createElement('div');
-      containerButtons.setAttribute('id', 'divButtonsQuery');
+      containerButtons.setAttribute('id', 'divButtonsMedium');
       containerButtons.className = 'buttonContainer';
 
       for (let page = 1; page <= `${Math.ceil(data.count / 2)}`; page++) {
@@ -111,19 +111,27 @@ function queryFunction (y) {
             `;
 
       // prüfen ob ein Button Container von "medium" existiert, wenn ja dann lösche ihn und erstelle einen neuen
-      if (document.getElementById('divButtonsQuery') !== null) {
-        const buttonContainer = document.getElementById('divButtonsQuery');
+      // in den else if Statments wird überprüft ob ein Container von "large" sowie ein Container von "small" existiert -->
+      // wichtig während der Skallierung von large --> small
+      if (document.getElementById('divButtonsMedium') !== null) {
+        const buttonContainerMedium = document.getElementById('divButtonsMedium');
+        document.body.removeChild(buttonContainerMedium);
+      } else if (document.getElementById('divButtons') !== null) {
+        const buttonContainer = document.getElementById('divButtons');
         document.body.removeChild(buttonContainer);
+      } else if (document.getElementById('divButtonsSmall') !== null) {
+        const buttonContainerSmall = document.getElementById('divButtonsSmall');
+        document.body.removeChild(buttonContainerSmall);
       }
 
       const containerButtons = document.createElement('div');
       containerButtons.setAttribute('id', 'divButtonsSmall');
-      containerButtons.className = 'buttonContainer pagination-sm';
+      containerButtons.className = 'buttonContainer';
 
       for (let page = 1; page <= `${Math.ceil(data.count / 1)}`; page++) {
         const button = document.createElement('button');
         button.innerHTML = page;
-        button.className = 'btn btn-outline-light';
+        button.className = 'btn btn-outline-light btn-sm';
         button.value = page;
         button.addEventListener('click', buttonFunction);
 
@@ -196,9 +204,9 @@ function queryFunction1 (x) {
             `;
 
       // prüfen ob ein Button Container von "medium" existiert, wenn ja dann lösche ihn und erstelle einen neuen
-      if (document.getElementById('divButtonsQuery') !== null) {
-        const buttonContainer = document.getElementById('divButtonsQuery');
-        document.body.removeChild(buttonContainer);
+      if (document.getElementById('divButtonsMedium') !== null) {
+        const buttonContainerMedium = document.getElementById('divButtonsMedium');
+        document.body.removeChild(buttonContainerMedium);
       }
 
       const containerButtons = document.createElement('div');
