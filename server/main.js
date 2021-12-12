@@ -2,12 +2,13 @@
 const express = require('express');
 
 // erzeugen eines application objects durch den Aufruf der top level function von express
-const api = express();
+const app = express();
 
-const PORT = 8080;
+const args = process.argv;
+const PORT = args[2];
 
 // statische Dateien bereit stellen, mit der Middelwarefunktion express.static
-api.use(express.static('_dist'));
+app.use(express.static('_dist'));
 
 // Database
 const db = require('../config/database.js');
@@ -22,7 +23,7 @@ db.authenticate().then(function () {
 });
 
 // Kinosaal anlegen
-api.post('/addKinosaal', function (req, res) {
+app.post('/addKinosaal', function (req, res) {
   console.log('i got a request!');
   console.log(req.body);
 
@@ -35,7 +36,7 @@ api.post('/addKinosaal', function (req, res) {
 });
 
 // Vorstellung anlegen
-api.post('/addVorstellung', function (req, res) {
+app.post('/addVorstellung', function (req, res) {
   console.log('i got a request!');
   console.log(req.body);
 
@@ -50,7 +51,7 @@ api.post('/addVorstellung', function (req, res) {
 });
 
 // Reservierung anlegen
-api.post('/addReservierung', function (req, res) {
+app.post('/addReservierung', function (req, res) {
   console.log('i got a request!');
   console.log(req.body);
 
@@ -63,7 +64,7 @@ api.post('/addReservierung', function (req, res) {
 });
 
 // Berechnung der Seite bei min-height: 600px
-api.get('/api/:page', function (req, res) {
+app.get('/api/:page', function (req, res) {
   const LIMIT = 3;
 
   const num = req.params.page;
@@ -78,7 +79,7 @@ api.get('/api/:page', function (req, res) {
 });
 
 // Berechnung der Seite bei min-height: 400px
-api.get('/api/medium/:page', function (req, res) {
+app.get('/api/medium/:page', function (req, res) {
   const LIMIT = 2;
 
   const num = req.params.page;
@@ -93,7 +94,7 @@ api.get('/api/medium/:page', function (req, res) {
 });
 
 // Berechnung der Seite small
-api.get('/api/small/:page', function (req, res) {
+app.get('/api/small/:page', function (req, res) {
   const LIMIT = 1;
 
   const num = req.params.page;
@@ -108,6 +109,7 @@ api.get('/api/small/:page', function (req, res) {
 });
 
 // Starten des Servers an Port 8080
-api.listen(PORT, function () {
-  console.log(`Server running on port: ${PORT}`);
+
+app.listen(PORT || 3000, function () {
+  console.log('Server running on port: ' + this.address().port);
 });
