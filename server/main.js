@@ -1,12 +1,13 @@
 const express = require('express');
 
-const api = express();
+const app = express();
 
-const PORT = process.argv[2] || 8080;
+const args = process.argv;
+const PORT = args[2];
 
 // statische Dateien bereit stellen, mit der Middelwarefunktion express.static
-api.use(express.static('_dist'));
+app.use(express.static('_dist'));
 
-api.listen(PORT, function () {
-  console.log(`Server running on port: ${PORT}`);
+app.listen(PORT || 3000, function () {
+  console.log('Server running on port: ' + this.address().port);
 });

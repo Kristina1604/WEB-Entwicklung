@@ -11,14 +11,14 @@
   },
   "scripts": {
     "lint": "echo '=> linting files' && semistandard client/src/js/**.js && semistandard server/main.js",
-    "html": "echo '=> creating static html files' && mkdir _dist && cp client/src/index.html _dist/",
+    "html": "echo '=> creating html file' && mkdir _dist && cp client/src/index.html _dist/",
     "css": "echo '=> converting less to css' &&  lessc client/src/styles/style.less _dist/styles/style.css",
-    "js": "echo '=> making js files ready for browser' && browserify client/src/js/index.js -o _dist/js/main.js",
-    "minify": "echo '=> minify all ressources' && terser _dist/js/main.js -o _dist/js/main.js && css-minify -d _dist/styles/ -o _dist/styles/",
+    "js": "echo '=> bundle js files' && browserify client/src/js/index.js -o _dist/js/main.js",
+    "minify": "echo '=> minify js and css files' && terser _dist/js/main.js -o _dist/js/main.js && css-minify -d _dist/styles/ -o _dist/styles/",
     "clean": "echo '=> cleaning project' && rm -rf node_modules && rm -rf _dist && mkdir _dist",
     "build": "echo '=> building project' && npm run lint && rm -r _dist && npm run html &&  npm run css && npm run js && npm run minify",
-    "debug": "echo '=> building debug project' && npm run lint && rm -r _dist && npm run html && npm run css && npm run js",
-    "start": "echo '=> starting server' && node server/main.js"
+    "debug": "echo '=> debug project' && npm run lint && rm -r _dist && npm run html && npm run css && npm run js",
+    "start": "echo '=> starting server' && node server/main.js 8080"
   },
   "dependencies": {
     "express": "^4.17.1",
