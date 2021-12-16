@@ -110,9 +110,9 @@ const FORMULAR_TEMPLATES = {
  * @param {Event} event Event welches Informationen über den 'Klick' des Benutzers enthält
  */
 function toggleMenu (event) {
-  const c_or_o = event.target.id.charAt(0); // Evaluiert zu 'c' bei Klick auf Kunde, und zu 'o' bei Klick auf Betreiber
-  const open = c_or_o == 'c' ? C_OPEN : O_OPEN; // Übernimmt Booleanwert (auf=true,zu=false) des entsprechenden Dropdowns
-  const subButtons = document.getElementsByClassName(`${c_or_o}SubButton`); // HTMLCollection aller Dropdownitems des entsprechenden Dropdownmenüs
+  const currentToggle = event.target.id.charAt(0); // Evaluiert zu 'c' bei Klick auf Kunde, und zu 'o' bei Klick auf Betreiber
+  const open = currentToggle === 'c' ? C_OPEN : O_OPEN; // Übernimmt Booleanwert (auf=true,zu=false) des entsprechenden Dropdowns
+  const subButtons = document.getElementsByClassName(`${currentToggle}SubButton`); // HTMLCollection aller Dropdownitems des entsprechenden Dropdownmenüs
 
   // HTMLCollection erlaubt kein forEach(), deshalb wandle ich es in ein normales Array um
   const subButtonsArray = [];
@@ -135,10 +135,10 @@ function toggleMenu (event) {
   }
 
   // Die richtige Booleanvariable muss noch geflipt werden
-  c_or_o == 'c' ? C_OPEN = !C_OPEN : O_OPEN = !O_OPEN;
+  currentToggle === 'c' ? C_OPEN = !C_OPEN : O_OPEN = !O_OPEN;
 
   // Ein geöffneter Hauptbutton soll etwas heller als ein geschlossener sein
-  const primaryButton = document.getElementById(c_or_o == 'c' ? 'customerButton' : 'operatorButton');
+  const primaryButton = document.getElementById(currentToggle === 'c' ? 'customerButton' : 'operatorButton');
   open ? removeClass(primaryButton, 'openPrimaryButton') : addClass(primaryButton, 'openPrimaryButton');
 }
 
@@ -152,13 +152,13 @@ function switchSide (event) {
   const newSite = event.target.id;
 
   // Klick auf Seite, die bereits offen ist, hat keine Wirkung
-  if (newSite == CURRENTSIDE) {
+  if (newSite === CURRENTSIDE) {
     return;
   }
 
   const formularWrapper = document.getElementById('formular');
   // Alte Seite entfernen
-  if (CURRENTSIDE != SITE.EMPTY) {
+  if (CURRENTSIDE !== SITE.EMPTY) {
     formularWrapper.innerHTML = '';
   }
 
@@ -292,15 +292,6 @@ function closePopup (_event) {
  */
 
 /**
- *Entfernt den kompletten Inhalt des übergebenen Elements
- * @param {Element} element Das zu leerende Element
- */
-function clearElement (element) {
-  // Entfernt kompletten Inhalt des übergebenen Elements
-  element.innerHTML = '';
-}
-
-/**
  * Erzeugt neues Element, optional direkt mit Klassen, Styles oder sonstigen Attributen
  * @param {String} tagName Name des Element-Tags
  * @param {Object} attributes OPTIONAL z.B {class:"d-flex row",style:"backgroundColor:red;"}
@@ -364,15 +355,6 @@ function setStyle (element, styleString) {
  */
 function setAttribute (element, key, value = key) {
   element.setAttribute(key, value);
-}
-
-/**
- * Entfernt beliebiges Attribut für ein Element.
- * @param {Element} element Element, für welches das Attribut entfernt wird
- * @param {String} key Attributname
- */
-function removeAttribute (element, key) {
-  element.removeAttribute(key);
 }
 
 /**
