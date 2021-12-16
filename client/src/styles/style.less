@@ -4,7 +4,7 @@
 @grey: #808080;
 @dark-grey:#555555;
 @white:#FFFFFF;
-
+@yellow:#ffa600;
 
 
 
@@ -132,21 +132,33 @@ margin-top: 100px;
     width: @wrapper-width - @navbar-width
   }
 
-  //Die beiden Hauptbuttons 'Betreiber' und 'Kunde'
+  #operatorButton{
+    margin-top: 8%;
+  }
+
+  #customerButton{
+    margin-top: 12%;
+
+  }
+
+   //Die beiden Hauptbuttons 'Betreiber' und 'Kunde'
   .primaryButton {
-    width:100%;
+    width:90%;
     height:3em;
-    background-color: @primaryButtons;
+    background-color: @white;
+    border-radius: 3px;
     text-align: center;
+    margin-left: 5%;
     margin-bottom:1px;
-    color: @primaryButtonFont;
+    color: @primaryButtons;
     box-sizing: border-box;
-    border: 2px white;
+    // border: 2px white;
     box-shadow: none;
   }
   .primaryButton:hover{
-    background-color: @primaryButton-hover;
-    color:@primaryButtonFont-hover;
+    background-color: @subButtonFont;
+    color:@white;
+    border: 2px solid @white;
     box-shadow: none;
   }
   .primaryButton:first-child{
@@ -154,8 +166,9 @@ margin-top: 100px;
   }
   //Geöffneter Hauptbutton
   .openPrimaryButton {
-    background-color: @primaryButtonOpen;
-    color: @primaryButtonOpenFont;
+    background-color: @primaryButtonOpenFont;
+    border: 2px solid @yellow;
+    color: @yellow;
   }
 
   //Das Anklicken der <p>-Tags zu verhindern macht den js-Code etwas einfachen
@@ -170,18 +183,21 @@ margin-top: 100px;
   .oSubButton, .cSubButton {
     text-align: center;
     margin-bottom:1px;
-    color:@subButtonFont;
-    width:100%;
-    background-color: @subButtons;
+    color:@white;
+    width:90%;
+    margin-left: 5%;
+    background-color: @subButtonFont;
   }
   .oSubButton:first-child, .cSubButton:first-child {
     
     margin-top: 1px;
   }
   .oSubButton:hover, .cSubButton:hover {
-    background-color: @subButtons-hover;
-    color:@subButtonFont-hover;
-  }
+    background-color: @subButtonFont;
+    color:@white;
+    text-decoration: underline;
+    text-decoration-color: @yellow;
+ }
 
   .inputField {
     background-color: @inputFieldColor;
