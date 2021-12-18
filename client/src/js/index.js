@@ -1,4 +1,4 @@
-const y = window.matchMedia('(min-height: 400px)');
+const y = window.matchMedia('(min-height: 500px)');
 
 function queryFunction (y) {
   if (y.matches) {
@@ -22,7 +22,7 @@ function queryFunction (y) {
 
                             </div>`;
       }
-      document.getElementById('vorstellungen').innerHTML = `
+      document.getElementById('formular').innerHTML = `
 
             <p class="font-weight-bold">${data.count} Einträge - Seite 1 von ${Math.ceil(data.count / 2)}</p>
             ${data.rows.map(blogTemplate).join('')}
@@ -75,7 +75,7 @@ function queryFunction (y) {
 
                       </div>`;
           }
-          document.getElementById('vorstellungen').innerHTML = `
+          document.getElementById('formular').innerHTML = `
 
                       <p class="font-weight-bold">${data.count} Einträge - Seite ${page} von ${Math.ceil(data.count / 2)}</p>
                       ${data.rows.map(blogTemplate).join('')}`;
@@ -103,7 +103,7 @@ function queryFunction (y) {
                      
                             </div>`;
       }
-      document.getElementById('vorstellungen').innerHTML = `
+      document.getElementById('formular').innerHTML = `
            
             <p class="font-weight-bold">${data.count} Einträge - Seite 1 von ${Math.ceil(data.count / 1)}</p>
             ${data.rows.map(blogTemplate).join('')}
@@ -161,7 +161,7 @@ function queryFunction (y) {
   
                       </div>`;
           }
-          document.getElementById('vorstellungen').innerHTML = `
+          document.getElementById('formular').innerHTML = `
                     
                       <p class="font-weight-bold">${data.count} Einträge - Seite ${page} von ${Math.ceil(data.count / 1)}</p>
                       ${data.rows.map(blogTemplate).join('')}`;
@@ -197,7 +197,7 @@ function queryFunction1 (x) {
                             </div>`;
       }
 
-      document.getElementById('vorstellungen').innerHTML = `
+      document.getElementById('formular').innerHTML = `
 
             <p class="font-weight-bold">${data.count} Einträge - Seite 1 von ${Math.ceil(data.count / 3)}</p>
             ${data.rows.map(blogTemplate).join('')}
@@ -247,7 +247,7 @@ function queryFunction1 (x) {
                         </div>`;
           }
 
-          document.getElementById('vorstellungen').innerHTML = `
+          document.getElementById('formular').innerHTML = `
 
                         <p class="font-weight-bold">${data.count} Einträge - Seite ${page} von ${Math.ceil(data.count / 3)}</p>
                         ${data.rows.map(blogTemplate).join('')}`;
