@@ -2,6 +2,12 @@
 @background: black;
 @boxShadow:rgb(255, 166, 0); 
 @fontColor:white;
+@grey: #808080;
+@dark-grey:#555555;
+@white:#FFFFFF;
+@yellow:#ffa600;
+
+
 
 body {
     background-color: @background;
@@ -81,3 +87,231 @@ h2{
   margin-top:2%;
 
 }
+  #buttonBetreiber {
+    box-shadow: 0px 5px 10px @grey;
+    height: 100px;
+    width: 200px;
+    &:hover {
+      background-color: @dark-grey;
+      color: @white;
+    }
+    &:active {
+       box-shadow: 0px 0px 0px;
+    }
+  }
+
+ /* 
+  * --------------------------------------------------------------- 
+  * -------------------------Layoutelemente------------------------
+  */
+
+  //Diese Variablen können beliebig angepasst werden
+  //Solange git: wrapper-height > ueberschrift-height && wrapper-width > navleiste-width
+  @margin-top:50px;
+  @wrapper-height:600px;
+  @wrapper-width:1000px;
+  @caption-height:100px;
+  @navbar-width:200px;
+  @border-outer:2px;
+  @border-inner:1px;
+  @border-color: white;
+  //@boxShadow: 0px 0px 0px rgb(255, 166, 0);
+  @boxShadow:none;
+
+  @primaryButtons: black;
+  @primaryButton-hover: rgb(201, 169, 81);
+  @primaryButtonFont: white;
+  @primaryButtonFont-hover:black;
+  @primaryButtonOpen:rgb(187, 146, 32);
+  @primaryButtonOpenFont:black;
+
+
+  @subButtons: rgb(255, 210, 85);
+  @subButtons-hover: rgb(255, 223, 134);
+  @subButtonFont: black;
+  @subButtonFont-hover: white;
+  //@subButtonOpen: 0;
+  //@subButtonOpen-hover: 0;
+
+  @inputFieldColor: rgb(255, 244, 223);
+  @inputFieldFont: black;//rgb(255, 166, 0);
+
+
+
+  #wrapper {
+    //Alles umschließendes DIV
+    margin: auto;
+    margin-top:@margin-top;
+    height: @wrapper-height;
+    width: @wrapper-width;
+    box-sizing: border-box;
+    border: @border-outer solid @border-color;
+    box-shadow: @boxShadow;
+    color: @fontColor;
+  }
+  #ueberschrift {
+    //Oberer horizontaler Balken für Überschrift
+    height: @caption-height - @border-outer - @border-inner;
+    width: @wrapper-width - (2*@border-outer);
+    box-sizing: border-box;
+    border-bottom: @border-inner solid @border-color;
+  }
+  #inhalt {
+    //Umschließendes unteres Element. Enthält Navleiste und Contentfeld
+    display: flex;
+    height: @wrapper-height - @caption-height - @border-inner;
+    width: @wrapper-width - (2*@border-outer);
+  }
+  #navleiste {
+    //Navleiste links
+    height: @wrapper-height - @caption-height - @border-inner;
+    width: @navbar-width;
+    box-sizing: border-box;
+    border-right: @border-inner solid @border-color;
+  }
+  .navleistenBereich {
+    //Bereich für einen Hauptbutton inklusive seiner Menüpunkte
+    height: 110px;
+  }
+  #formular {
+    //Contentbereich für z.B Inputfelder, Listen und vielem mehr
+    height: @wrapper-height - @caption-height - @border-inner;
+    width: @wrapper-width - @navbar-width
+  }
+
+  #operatorButton{
+    margin-top: 8%;
+  }
+
+  #customerButton{
+    margin-top: 12%;
+
+  }
+
+   //Die beiden Hauptbuttons 'Betreiber' und 'Kunde'
+  .primaryButton {
+    display: table;
+    width:90%;
+    height:3em;
+    background-color: @white;
+    border-radius: 3px;
+    text-align: center;
+    margin-left: 5%;
+    margin-bottom:1px;
+    color: @primaryButtons;
+    box-sizing: border-box;
+    // border: 2px white;
+    box-shadow: none;
+  }
+  .primaryButton:hover{
+    background-color: @subButtonFont;
+    color:@white;
+    border: 2px solid @white;
+    box-shadow: none;
+  }
+  .primaryButton:first-child{
+    margin-top: 1px;
+  }
+  //Geöffneter Hauptbutton
+  .openPrimaryButton {
+    background-color: @primaryButtonOpenFont;
+    border: 2px solid @yellow;
+    color: @yellow;
+  }
+
+  //Das Anklicken der <p>-Tags zu verhindern macht den js-Code etwas einfachen
+  //(toggleMenu() kann dann einfacher herausfinden, welcher Hauptbutton gedrückt wurde)
+  //Ansonsten keine Funktion
+  #navleiste > div > p  {
+    pointer-events: none;
+  }
+
+
+  //Unterbuttons
+  .oSubButton, .cSubButton {
+    text-align: center;
+    margin-bottom:1px;
+    color:@white;
+    width:90%;
+    margin-left: 5%;
+    background-color: @subButtonFont;
+  }
+  .oSubButton:first-child, .cSubButton:first-child {
+    
+    margin-top: 1px;
+  }
+  .oSubButton:hover, .cSubButton:hover {
+    background-color: @subButtonFont;
+    color:@white;
+    text-decoration: underline;
+    text-decoration-color: @yellow;
+ }
+
+  .inputField {
+    background-color: @inputFieldColor;
+    color: @inputFieldFont;  
+  }
+
+  
+
+
+  //Style für Unterputtons + Übergang
+  @button-transitionTime: .05s;
+  .inactive {
+    height: 0;
+    display: hidden;
+    font-size: 0;
+    transition: height @button-transitionTime
+  }
+  .active {
+    height: 2em;
+    font-size: 100%;
+    transition: height @button-transitionTime, font-size @button-transitionTime;
+  }
+
+
+ //--------------------------------------------------------------- 
+ //-------------------------Popup-Ansicht-------------------------
+ //---------------------------------------------------------------
+
+  //Ausgrauendes Hintergrundelement
+  .blurPage {
+    margin: 0;
+    width:100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    top:0;
+    left: 0;
+  }
+
+
+  //-----------------------------Popup-----------------------------
+
+  //Hauptwrapper
+  .popupWrapper {
+    position: absolute;
+    width:400px;
+    height:150px;
+    background-color: white;
+    border-radius: .25em;
+  }
+  //Einzelteile
+  .popupHeader {
+    width:400px;
+    height:50px;
+  }
+  .popupText {
+    width:400px;
+    height:57px;
+    text-align: center;
+  }
+
+  .popupFooter {
+    width:400px;
+    height:43px;
+  }
+  .acceptButton {
+    float: right;
+    margin-right: 5px;
+  }

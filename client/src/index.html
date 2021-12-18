@@ -9,16 +9,33 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	<link rel= "stylesheet" href= "styles/style.min.css">  <!-- Pfad zum minifizierten css script ausm _dist Ordner -->
 </head>
-<body>
-
-    <h2> Kinoverwaltung </h2>
+<body id="body">
 
        
     
     
-    <div  class="flex-container" id= "vorstellungen"></div>
 
-
+    <div id="wrapper" class="justify-content-center">
+        <div id=ueberschrift>
+            <h2 class="m-0">Kinoverwaltung</h2>
+        </div>
+        <div id="inhalt">
+            <div id="navleiste">
+                <div class="navleistenBereich">
+                    <div id="operatorButton" class="primaryButton"><p class="my-auto"><div style="display: table-cell; vertical-align: middle;pointer-events: none;">Betreiber</div></div>
+                    <div id="vorstellungAnlegen" class="subButton inactive oSubButton"><p class="my-auto">Vorstellung anlegen</p></div>
+                    <div id="kinosaalAnlegen" class="subButton inactive oSubButton"><p class="my-auto">Kinosaal anlegen</p></div>
+                </div>
+                <div class="navleistenBereich">
+                    <div id="customerButton" class="primaryButton"><p class="my-auto"><div style="display: table-cell; vertical-align: middle;pointer-events: none;">Kunde</div></div>
+                    <div id="ticketsReservieren" class="subButton inactive cSubButton"><p class="my-auto">Tickets reservieren</p></div>
+                </div>
+            </div>
+            <div id=formular></div>
+            <div  class="flex-container" id= "vorstellungen"></div>
+        </div>
+    </div>
+    
 
 
     <!--gebündelte main.js datei referenzieren -->
