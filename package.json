@@ -10,7 +10,7 @@
     "url": "https://github.com/Kristina1604/WEB-Entwicklung.git"
   },
   "scripts": {
-    "lint": "echo '=> linting files' && semistandard client/src/js/**.js && semistandard server/main.js",
+    "lint": "echo '=> linting files' && semistandard client/src/js/index.js && semistandard server/main.js",
     "html": "echo '=> creating html file' && mkdir _dist && cp client/src/index.html _dist/",
     "css": "echo '=> converting less to css' &&  lessc client/src/styles/style.less _dist/styles/style.css",
     "js": "echo '=> bundle js files' && browserify client/src/js/index.js -o _dist/js/main.js",
