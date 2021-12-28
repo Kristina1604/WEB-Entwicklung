@@ -1,4 +1,8 @@
-// Dateiname betreiber.js ist nicht mehr ganz passend...
+/*
+ * ---------------------------------------------------------------
+ * -------------------------Event-Listener------------------------
+ * ---------------------------------------------------------------
+ */
 
 // Eventlistener für die Hauptbuttons in der Navbar
 const primaryButtons = document.getElementsByClassName('primaryButton');
@@ -12,30 +16,55 @@ for (let i = 0; i < subButtons.length; i++) {
   subButtons.item(i).addEventListener('click', switchSide);
 }
 
+// Listener, der jedes Mal, wenn die Fenstergröße sich ändert, feuert
+window.addEventListener('resize', checkCurrentListHeightState);
+
 /*
  * ---------------------------------------------------------------
  * -----------------------Globale Variablen-----------------------
  * ---------------------------------------------------------------
  */
 
+// ********************
+// ******Nav-Menü******
+// ********************
 // Variablen, die den aktuellen Zustand der beiden 'Dropdowns' erfassen
 // c = customer
 // o = operator
 let O_OPEN = false;
 let C_OPEN = false;
 
+// ********************
+// **Seitennavigation**
+// ********************
 // Objekt um Enumwerte für currentSide zu imitieren
 // Werte müssen den zugehörigen IDs der Buttons in der NavBar entsprechen
 const SITE = {
   EMPTY: 'leer',
   VORSTELLUNG_ANLEGEN: 'vorstellungAnlegen',
   KINOSAAL_ANLEGEN: 'kinosaalAnlegen',
-  TICKETS_RESERVIEREN: 'ticketsReservieren'
+  TICKETS_RESERVIEREN: 'ticketsReservieren',
+  VORSTELLUNGEN_ANZEIGEN: 'vorstellungenAnzeigen'
 };
 Object.freeze(SITE);
 // Variable für aktuell geöffnete Seite
 let CURRENTSIDE = SITE.EMPTY;
 
+// ********************
+// ListenResponsiveness
+// ********************
+// Alle Breakpoints in Pixeln (kann beliebig erweitert/geändert werden)
+const LISTHEIGHT_BREAKPOINTS = [500, 600];
+// Aktuell vorliegender 'Fall' als Zahl
+// 0 für '<500px'
+// 1 für '500-599px'
+// 2 für '>=600px'
+let CURRENT_LISTHEIGHT_STATE = null;
+checkCurrentListHeightState(); // Initialisieren
+
+// ********************
+// ***Formular-Daten***
+// ********************
 // Daten zum Laden eines Formulars. Property-Keys müssen IDs der zugehörgen Buttons / Enumvariable SITE entsprechen
 const FORMULAR_TEMPLATES = {
   ticketsReservieren: {
@@ -101,7 +130,7 @@ const FORMULAR_TEMPLATES = {
 
 /*
  * ---------------------------------------------------------------
- * -------------------------Seiten-Events--------------------------
+ * -------------------------Seiten-Events-------------------------
  * ---------------------------------------------------------------
  */
 
@@ -157,16 +186,24 @@ function switchSide (event) {
   }
 
   const formularWrapper = document.getElementById('formular');
-  // Alte Seite entfernen
-  if (CURRENTSIDE !== SITE.EMPTY) {
-    formularWrapper.innerHTML = '';
-  }
-
+  // Alten Inhalt entfernen
+  clearCurrentSite();
   // Neuer Seitenwert in globalen Variablen hinterlegen
   CURRENTSIDE = newSite;
 
   // Passendes Formular laden
-  addElement(formularWrapper, createFormFromJSON(FORMULAR_TEMPLATES[newSite]));
+  if (newSite === SITE.VORSTELLUNGEN_ANZEIGEN) {
+    loadList();
+  } else {
+    addElement(formularWrapper, createFormFromJSON(FORMULAR_TEMPLATES[newSite]));
+  }
+}
+
+function clearCurrentSite () {
+  const formularWrapper = document.getElementById('formular');
+  formularWrapper.innerHTML = '';
+  removeListpageButtons();
+  CURRENTSIDE = SITE.EMPTY;
 }
 
 /**
@@ -283,6 +320,175 @@ function closePopup (_event) {
   removeElement(document.getElementById('blurPage'));
   // Eventlistener ist nicht mehr nötig
   window.removeEventListener('resize', adjustPopupPosition);
+}
+
+// Liste responsive machen:
+
+/**
+ * Passt CURRENT_LISTHEIGHT_STATE an.
+ * 0, wenn Fenster kleiner LISTHEIGHT_BREAKPOINTS[0]
+ * 1, wenn zwischen LISTHEIGHT_BREAKPOINTS[0] und [1]
+ * 2, wenn zwischen [1] und [2] etc...
+ * Ausserdem wird bei einer Änderung von das ListLayout aktualisiert
+ * Wird bei Fenstergrößenänderung aufgerufen
+ */
+function checkCurrentListHeightState () {
+  // Aktuelle Fensterhöhe abfragen
+  const currentHeight = window.innerHeight;
+
+  // Neuen State herausfinden
+  let newIndex = LISTHEIGHT_BREAKPOINTS.findIndex(breakpoint => currentHeight < breakpoint);
+  if (newIndex === -1) {
+    // FensterHeight größer als letzter Breakpoint
+    newIndex = LISTHEIGHT_BREAKPOINTS.length;
+  }
+
+  // Nur weitermachen, wenn sich der State geändert hat
+  if (newIndex !== CURRENT_LISTHEIGHT_STATE) {
+    // Neuen State global abspeichern
+    CURRENT_LISTHEIGHT_STATE = newIndex;
+    // Wenn wir uns gerade auf der Liste befinden, muss diese neu geladen werden
+    if (CURRENTSIDE === SITE.VORSTELLUNGEN_ANZEIGEN) {
+      loadList();
+    }
+  }
+}
+
+/**
+ * Läd und aktualisiert Liste und Listenlayout (Einträge pro Seite, Anzahl Seitenbuttons)
+ */
+function loadList () {
+  // Die Funktionen für die verschiedenen Layouts unterscheiden sich nur in wenigen Punkten
+  // Die Variablen dafür werden in den folgenden Zeilen definiert
+  let entriesPerSite;
+  let fetchPath;
+  let buttonContainerId;
+  let additionalButtonClasses;
+
+  switch (CURRENT_LISTHEIGHT_STATE) {
+    case 0:
+      // Small
+      entriesPerSite = 1;
+      fetchPath = '/api/small/';
+      buttonContainerId = 'divButtonsSmall';
+      additionalButtonClasses = 'btn-sm';
+      break;
+    case 1:
+      // Medium
+      entriesPerSite = 2;
+      fetchPath = '/api/medium/';
+      buttonContainerId = 'divButtonsMedium';
+      additionalButtonClasses = '';
+      break;
+    case 2:
+      // Large
+      entriesPerSite = 3;
+      fetchPath = '/api/';
+      buttonContainerId = 'divButtons';
+      additionalButtonClasses = '';
+      break;
+  }
+
+  // Ab hier müsste dir alles bekannt vorkommen
+  // Der einzigen Unterschiede ab jetzt sind
+  // 1. Die Verwendung der oben definierten Variablen (entriesPerSite,fetchPath,...),
+  // um die 3 Fälle (small, medium, large) unterscheiden zu können
+  // 2. Die removeListpageButtons-Funktion, die aber das selbe macht wie dein Code davor.
+  // Ich musste sie nur auslagern, um die Buttons auch beim Wechsel auf eine Formularseite entfernen zu können
+
+  async function getData () {
+    const page = 1;
+    const response = await window.fetch(`${fetchPath}${page}`);
+    const data = await response.json();
+
+    console.log(data);
+
+    function blogTemplate (vorstellung) {
+      return `
+              <div class= "border border-info rounded flex-items-container">
+                  <div class= "container-filmname"> ${vorstellung.filmname} </div>
+                  <div class="container-datum"> ${vorstellung.datum} </div> </br>
+                  <div class="container-beginn"> 
+                    ${vorstellung.kinosaal} 
+                    </br>
+                    ${vorstellung.uhrzeit} Uhr 
+                  </div>
+
+              </div>
+              `;
+    }
+    document.getElementById('formular').innerHTML = `
+
+          <p class="font-weight-bold">${data.count} Einträge - Seite 1 von ${Math.ceil(data.count / entriesPerSite)}</p>
+          ${data.rows.map(blogTemplate).join('')}
+
+          `;
+
+    // prüfen ob ein Button Container existiert, wenn ja dann lösche ihn...
+    removeListpageButtons();
+
+    // ...und erstelle einen neuen
+    const containerButtons = document.createElement('div');
+    containerButtons.setAttribute('id', buttonContainerId);
+    containerButtons.className = 'buttonContainer';
+
+    for (let page = 1; page <= `${Math.ceil(data.count / entriesPerSite)}`; page++) {
+      const button = document.createElement('button');
+      button.innerHTML = page;
+      button.className = `btn btn-outline-light ${additionalButtonClasses}`;
+      button.value = page;
+      button.addEventListener('click', buttonFunction);
+
+      containerButtons.appendChild(button);
+    }
+
+    document.body.appendChild(containerButtons);
+
+    function buttonFunction () {
+      const page = this.value;
+
+      getData();
+      async function getData () {
+        const response = await window.fetch(`${fetchPath}${page}`);
+        const data = await response.json();
+
+        function blogTemplate (vorstellung) {
+          return `
+
+                    <div class= "border border-info rounded flex-items-container">
+
+                        <div class= "container-filmname"> ${vorstellung.filmname} </div>
+
+                        <div class="container-datum"> ${vorstellung.datum} </div> </br>
+                        <div class="container-beginn"> ${vorstellung.kinosaal} </br>
+                        ${vorstellung.uhrzeit} Uhr </div>
+
+                    </div>`;
+        }
+        document.getElementById('formular').innerHTML = `
+
+                    <p class="font-weight-bold">${data.count} Einträge - Seite ${page} von ${Math.ceil(data.count / entriesPerSite)}</p>
+                    ${data.rows.map(blogTemplate).join('')}`;
+      }
+    }
+  }
+  getData();
+}
+
+/**
+ * Entfernt Buttons für den Seitenwechsel der Liste (wenn vorhanden)
+ */
+function removeListpageButtons () {
+  if (document.getElementById('divButtonsMedium') !== null) {
+    const buttonContainerMedium = document.getElementById('divButtonsMedium');
+    document.body.removeChild(buttonContainerMedium);
+  } else if (document.getElementById('divButtons') !== null) {
+    const buttonContainer = document.getElementById('divButtons');
+    document.body.removeChild(buttonContainer);
+  } else if (document.getElementById('divButtonsSmall') !== null) {
+    const buttonContainerSmall = document.getElementById('divButtonsSmall');
+    document.body.removeChild(buttonContainerSmall);
+  }
 }
 
 /*
