@@ -64,7 +64,7 @@ app.post('/addReservierung', function (req, res) {
 });
 
 // Berechnung der Seite bei min-height: 600px
-app.get('/api/:page', function (req, res) {
+app.get('/api/presentation/large/:page', function (req, res) {
   const LIMIT = 3;
 
   const num = req.params.page;
@@ -79,7 +79,7 @@ app.get('/api/:page', function (req, res) {
 });
 
 // Berechnung der Seite bei min-height: 400px
-app.get('/api/medium/:page', function (req, res) {
+app.get('/api/presentation/medium/:page', function (req, res) {
   const LIMIT = 2;
 
   const num = req.params.page;
@@ -94,7 +94,7 @@ app.get('/api/medium/:page', function (req, res) {
 });
 
 // Berechnung der Seite small
-app.get('/api/small/:page', function (req, res) {
+app.get('/api/presentation/small/:page', function (req, res) {
   const LIMIT = 1;
 
   const num = req.params.page;

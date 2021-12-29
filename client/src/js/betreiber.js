@@ -48,7 +48,7 @@ const SITE = {
 };
 Object.freeze(SITE);
 // Variable für aktuell geöffnete Seite
-let CURRENTSIDE = SITE.EMPTY;
+let CURRENTSIDE = SITE.VORSTELLUNGEN_ANZEIGEN;
 
 // ********************
 // ListenResponsiveness
@@ -59,7 +59,7 @@ const LISTHEIGHT_BREAKPOINTS = [500, 600];
 // 0 für '<500px'
 // 1 für '500-599px'
 // 2 für '>=600px'
-let CURRENT_LISTHEIGHT_STATE = null;
+let CURRENT_LISTHEIGHT_STATE;
 checkCurrentListHeightState(); // Initialisieren
 
 // ********************
@@ -193,7 +193,7 @@ function switchSide (event) {
 
   // Passendes Formular laden
   if (newSite === SITE.VORSTELLUNGEN_ANZEIGEN) {
-    loadList();
+    loadPresentationList();
   } else {
     addElement(formularWrapper, createFormFromJSON(FORMULAR_TEMPLATES[newSite]));
   }
@@ -349,7 +349,7 @@ function checkCurrentListHeightState () {
     CURRENT_LISTHEIGHT_STATE = newIndex;
     // Wenn wir uns gerade auf der Liste befinden, muss diese neu geladen werden
     if (CURRENTSIDE === SITE.VORSTELLUNGEN_ANZEIGEN) {
-      loadList();
+      loadPresentationList();
     }
   }
 }
@@ -357,7 +357,7 @@ function checkCurrentListHeightState () {
 /**
  * Läd und aktualisiert Liste und Listenlayout (Einträge pro Seite, Anzahl Seitenbuttons)
  */
-function loadList () {
+function loadPresentationList () {
   // Die Funktionen für die verschiedenen Layouts unterscheiden sich nur in wenigen Punkten
   // Die Variablen dafür werden in den folgenden Zeilen definiert
   let entriesPerSite;
@@ -369,22 +369,22 @@ function loadList () {
     case 0:
       // Small
       entriesPerSite = 1;
-      fetchPath = '/api/small/';
+      fetchPath = '/api/presentation/small/';
       buttonContainerId = 'divButtonsSmall';
       additionalButtonClasses = 'btn-sm';
       break;
     case 1:
       // Medium
       entriesPerSite = 2;
-      fetchPath = '/api/medium/';
+      fetchPath = '/api/presentation/medium/';
       buttonContainerId = 'divButtonsMedium';
       additionalButtonClasses = '';
       break;
     case 2:
       // Large
       entriesPerSite = 3;
-      fetchPath = '/api/';
-      buttonContainerId = 'divButtons';
+      fetchPath = '/api/presentation/large/';
+      buttonContainerId = 'divButtonsLarge';
       additionalButtonClasses = '';
       break;
   }
@@ -398,12 +398,12 @@ function loadList () {
 
   async function getData () {
     const page = 1;
-    const response = await window.fetch(`${fetchPath}${page}`);
+    const response = await window.fetch(fetchPath + `${page}`);
     const data = await response.json();
 
     console.log(data);
 
-    function blogTemplate (vorstellung) {
+    function listitemTemplate (vorstellung) {
       return `
               <div class= "border border-info rounded flex-items-container">
                   <div class= "container-filmname"> ${vorstellung.filmname} </div>
@@ -420,7 +420,7 @@ function loadList () {
     document.getElementById('formular').innerHTML = `
 
           <p class="font-weight-bold">${data.count} Einträge - Seite 1 von ${Math.ceil(data.count / entriesPerSite)}</p>
-          ${data.rows.map(blogTemplate).join('')}
+          ${data.rows.map(listitemTemplate).join('')}
 
           `;
 
@@ -435,7 +435,7 @@ function loadList () {
     for (let page = 1; page <= `${Math.ceil(data.count / entriesPerSite)}`; page++) {
       const button = document.createElement('button');
       button.innerHTML = page;
-      button.className = `btn btn-outline-light ${additionalButtonClasses}`;
+      button.className = 'btn btn-outline-light ' + additionalButtonClasses;
       button.value = page;
       button.addEventListener('click', buttonFunction);
 
@@ -449,10 +449,10 @@ function loadList () {
 
       getData();
       async function getData () {
-        const response = await window.fetch(`${fetchPath}${page}`);
+        const response = await window.fetch(fetchPath + `${page}`);
         const data = await response.json();
 
-        function blogTemplate (vorstellung) {
+        function listitemTemplate (vorstellung) {
           return `
 
                     <div class= "border border-info rounded flex-items-container">
@@ -468,12 +468,17 @@ function loadList () {
         document.getElementById('formular').innerHTML = `
 
                     <p class="font-weight-bold">${data.count} Einträge - Seite ${page} von ${Math.ceil(data.count / entriesPerSite)}</p>
-                    ${data.rows.map(blogTemplate).join('')}`;
+                    ${data.rows.map(listitemTemplate).join('')}`;
       }
     }
   }
   getData();
 }
+
+/**
+ * TODO:
+ * loadRoomList()
+ */
 
 /**
  * Entfernt Buttons für den Seitenwechsel der Liste (wenn vorhanden)
@@ -482,8 +487,8 @@ function removeListpageButtons () {
   if (document.getElementById('divButtonsMedium') !== null) {
     const buttonContainerMedium = document.getElementById('divButtonsMedium');
     document.body.removeChild(buttonContainerMedium);
-  } else if (document.getElementById('divButtons') !== null) {
-    const buttonContainer = document.getElementById('divButtons');
+  } else if (document.getElementById('divButtonsLarge') !== null) {
+    const buttonContainer = document.getElementById('divButtonsLarge');
     document.body.removeChild(buttonContainer);
   } else if (document.getElementById('divButtonsSmall') !== null) {
     const buttonContainerSmall = document.getElementById('divButtonsSmall');
