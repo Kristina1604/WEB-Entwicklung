@@ -329,7 +329,7 @@ function closePopup (_event) {
  * 0, wenn Fenster kleiner LISTHEIGHT_BREAKPOINTS[0]
  * 1, wenn zwischen LISTHEIGHT_BREAKPOINTS[0] und [1]
  * 2, wenn zwischen [1] und [2] etc...
- * Ausserdem wird bei einer Änderung von das ListLayout aktualisiert
+ * Ausserdem wird bei einer Änderung das ListLayout aktualisiert
  * Wird bei Fenstergrößenänderung aufgerufen
  */
 function checkCurrentListHeightState () {
@@ -390,7 +390,7 @@ function loadList () {
   }
 
   // Ab hier müsste dir alles bekannt vorkommen
-  // Der einzigen Unterschiede ab jetzt sind
+  // Die einzigen Unterschiede ab jetzt sind
   // 1. Die Verwendung der oben definierten Variablen (entriesPerSite,fetchPath,...),
   // um die 3 Fälle (small, medium, large) unterscheiden zu können
   // 2. Die removeListpageButtons-Funktion, die aber das selbe macht wie dein Code davor.
