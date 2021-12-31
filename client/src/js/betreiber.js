@@ -1,3 +1,5 @@
+const createMessage = require('./sendData.js');
+
 /*
  * ---------------------------------------------------------------
  * -------------------------Event-Listener------------------------
@@ -119,9 +121,17 @@ const FORMULAR_TEMPLATES = {
         type: 'text'
       },
       {
-        description: 'Irgendwelche anderen Eigenschaften',
-        placeholder: 'Gucke die Tage mal nochmal über die Aufgabenstellung drüber',
+        description: 'Kinosaal',
+        placeholder: 'Geben Sie den Kinosaal ein',
         type: 'text'
+      },
+      {
+        description: 'Uhrzeit',
+        type: 'time'
+      },
+      {
+        description: 'Datum',
+        type: 'date'
       }
 
     ]
@@ -229,7 +239,13 @@ function createFormFromJSON (json) {
         inputJSON.options.forEach(option => addElement(input, createElement('option', { text: option })));
         break;
       case 'number':
-        input = createElement('input', { class: 'form-control inputField', type: 'number', id: inputID });
+        input = createElement('input', { class: 'form-control inputField', type: 'number', id: inputID, placeholder: inputJSON.placeholder });
+        break;
+      case 'date':
+        input = createElement('input', { class: 'form-control inputField', type: 'date', id: inputID });
+        break;
+      case 'time':
+        input = createElement('input', { class: 'form-control inputField', type: 'time', id: inputID });
         break;
     }
     idCounter++;
@@ -241,12 +257,12 @@ function createFormFromJSON (json) {
   for (const inputJSON of json.inputs) {
     addElement(form, createFormElement(inputJSON));
   }
-  const submitButton = createElement('button', { text: 'Absenden', type: 'button', id: `submitButton-${json.buttonId}` });
+  const submitButton = createElement('button', { text: 'Absenden', id: `submitButton-${json.buttonId}`, class: 'btn btn-outline-light' });
   submitButton.addEventListener('click', togglePopup);
   addElement(form, submitButton);
   return form;
 }
-
+console.log('Test: ', createMessage.createVorstellung);
 /**
  * Öffnet die Popupansicht (also ausgegrauter Hintergrund und Popup)
  */
@@ -403,12 +419,12 @@ function loadPresentationList () {
 
     console.log(data);
 
-    function listitemTemplate (vorstellung) {
+    function listItemTemplate (vorstellung) {
       return `
               <div class= "border border-info rounded flex-items-container">
-                  <div class= "container-filmname"> ${vorstellung.filmname} </div>
+                  <div class= "container-name"> ${vorstellung.filmname} </div>
                   <div class="container-datum"> ${vorstellung.datum} </div> </br>
-                  <div class="container-beginn"> 
+                  <div class="container-info"> 
                     ${vorstellung.kinosaal} 
                     </br>
                     ${vorstellung.uhrzeit} Uhr 
@@ -420,7 +436,7 @@ function loadPresentationList () {
     document.getElementById('formular').innerHTML = `
 
           <p class="font-weight-bold">${data.count} Einträge - Seite 1 von ${Math.ceil(data.count / entriesPerSite)}</p>
-          ${data.rows.map(listitemTemplate).join('')}
+          ${data.rows.map(listItemTemplate).join('')}
 
           `;
 
@@ -452,23 +468,26 @@ function loadPresentationList () {
         const response = await window.fetch(fetchPath + `${page}`);
         const data = await response.json();
 
-        function listitemTemplate (vorstellung) {
+        function listItemTemplate (vorstellung) {
           return `
 
                     <div class= "border border-info rounded flex-items-container">
 
-                        <div class= "container-filmname"> ${vorstellung.filmname} </div>
+                        <div class= "container-name"> ${vorstellung.filmname} </div>
 
                         <div class="container-datum"> ${vorstellung.datum} </div> </br>
-                        <div class="container-beginn"> ${vorstellung.kinosaal} </br>
-                        ${vorstellung.uhrzeit} Uhr </div>
+                        <div class="container-info"> 
+                        ${vorstellung.kinosaal} 
+                        </br>
+                        ${vorstellung.uhrzeit} Uhr 
+                        </div>
 
                     </div>`;
         }
         document.getElementById('formular').innerHTML = `
 
                     <p class="font-weight-bold">${data.count} Einträge - Seite ${page} von ${Math.ceil(data.count / entriesPerSite)}</p>
-                    ${data.rows.map(listitemTemplate).join('')}`;
+                    ${data.rows.map(listItemTemplate).join('')}`;
       }
     }
   }
@@ -478,6 +497,20 @@ function loadPresentationList () {
 /**
  * TODO:
  * loadRoomList()
+ *
+ *    function listItemTemplate (kino) {
+      return `
+              <div class= "border border-info rounded flex-items-container">
+                  <div class= "container-name"> ${kino.kinoname} </div>
+                  <div class="container-info">
+                    Sitzreihen: ${kino.sitzreihen}
+                    </br>
+                    Sitze pro Sitzreihe: ${kino.sitze}
+                  </div>
+
+              </div>
+              `;
+    }
  */
 
 /**

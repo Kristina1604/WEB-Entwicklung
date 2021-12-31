@@ -22,6 +22,11 @@ db.authenticate().then(function () {
   console.log('connection failed: ' + error);
 });
 
+//   _______________________________________________________________
+//
+//                    Formulardaten senden
+//   _______________________________________________________________
+
 // Kinosaal anlegen
 app.post('/addKinosaal', function (req, res) {
   console.log('i got a request!');
@@ -30,6 +35,8 @@ app.post('/addKinosaal', function (req, res) {
   Model.Kinosaal.create({
 
     kinoname: req.body.kinoName,
+    sitzreihen: req.body.sitzreihen,
+    sitze: req.body.sitzeplätze,
     gesamtsitze: req.body.sitzeKomplett
 
   });
@@ -42,10 +49,10 @@ app.post('/addVorstellung', function (req, res) {
 
   Model.Vorstellung.create({
 
-    datum: req.body.kalendertag,
-    uhrzeit: req.body.zeit,
+    filmname: req.body.filmName,
     kinosaal: req.body.kinoSaal,
-    filmname: req.body.filmName
+    uhrzeit: req.body.zeit,
+    datum: req.body.kalendertag
 
   });
 });
@@ -58,12 +65,17 @@ app.post('/addReservierung', function (req, res) {
   Model.Reservierung.create({
 
     vorstellung: req.body.filmtitel,
-    tickets: req.body.sitzplätze,
+    tickets: req.body.kinokarten,
     kundenname: req.body.nameKunde
   });
 });
 
-// Berechnung der Seite bei min-height: 600px
+//   _______________________________________________________________
+//
+//                    Paginierung von Vorstellungen
+//   _______________________________________________________________
+
+// Berechnung der Seite large
 app.get('/api/presentation/large/:page', function (req, res) {
   const LIMIT = 3;
 
@@ -78,7 +90,7 @@ app.get('/api/presentation/large/:page', function (req, res) {
   });
 });
 
-// Berechnung der Seite bei min-height: 400px
+// Berechnung der Seite medium
 app.get('/api/presentation/medium/:page', function (req, res) {
   const LIMIT = 2;
 
@@ -103,6 +115,56 @@ app.get('/api/presentation/small/:page', function (req, res) {
     limit: LIMIT
   }).then(function (vorstellungs) {
     res.json(vorstellungs);
+  }).catch(function (error) {
+    console.log(error);
+  });
+});
+
+//   _______________________________________________________________
+//
+//                    Paginierung von Kinosälen
+//   _______________________________________________________________
+
+// Berechnung der Seite large
+app.get('/api/cinemaRoom/large/:page', function (req, res) {
+  const LIMIT = 3;
+
+  const num = req.params.page;
+  Model.Vorstellung.findAndCountAll({
+    offset: (num - 1) * LIMIT,
+    limit: LIMIT
+  }).then(function (kinos) {
+    res.json(kinos);
+  }).catch(function (error) {
+    console.log(error);
+  });
+});
+
+// Berechnung der Seite medium
+app.get('/api/cinemaRoom/medium/:page', function (req, res) {
+  const LIMIT = 2;
+
+  const num = req.params.page;
+  Model.Vorstellung.findAndCountAll({
+    offset: (num - 1) * LIMIT,
+    limit: LIMIT
+  }).then(function (kinos) {
+    res.json(kinos);
+  }).catch(function (error) {
+    console.log(error);
+  });
+});
+
+// Berechnung der Seite small
+app.get('/api/cinemaRoom/small/:page', function (req, res) {
+  const LIMIT = 1;
+
+  const num = req.params.page;
+  Model.Vorstellung.findAndCountAll({
+    offset: (num - 1) * LIMIT,
+    limit: LIMIT
+  }).then(function (kinos) {
+    res.json(kinos);
   }).catch(function (error) {
     console.log(error);
   });

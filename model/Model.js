@@ -8,6 +8,12 @@ const Kinosaal = db.define('kino', {
   kinoname: {
     type: Sequelize.STRING
   },
+  sitze: {
+    type: Sequelize.INTEGER
+  },
+  sitzreihen: {
+    type: Sequelize.INTEGER
+  },
   gesamtsitze: {
     type: Sequelize.INTEGER
   }
