@@ -257,7 +257,7 @@ function createFormFromJSON (json) {
   for (const inputJSON of json.inputs) {
     addElement(form, createFormElement(inputJSON));
   }
-  const submitButton = createElement('button', { text: 'Absenden', id: `submitButton-${json.buttonId}`, class: 'btn btn-outline-light' });
+  const submitButton = createElement('button', { text: 'Absenden', type:'button', id: `submitButton-${json.buttonId}`, class: 'btn btn-outline-light' });
   submitButton.addEventListener('click', togglePopup);
   addElement(form, submitButton);
   return form;
