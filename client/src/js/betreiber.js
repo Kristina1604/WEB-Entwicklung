@@ -1,5 +1,23 @@
-const createMessage = require('./sendData.js');
-
+/*
+ * ---------------------------------------------------------------
+ * ----------------------------Imports----------------------------
+ * ---------------------------------------------------------------
+ */
+const {
+  createVorstellung, createKinosaal, createReservierung
+} = require('./sendData.js');
+const {
+  createElement,
+  addClass,
+  removeClass,
+  addElement,
+  addElements
+} = require('./domHelper.js');
+const {
+  SITE,
+  FORMULAR_TEMPLATES
+} = require('./templates.js');
+const togglePopup = require('./popup.js');
 /*
  * ---------------------------------------------------------------
  * -------------------------Event-Listener------------------------
@@ -36,19 +54,6 @@ window.addEventListener('resize', checkCurrentListHeightState);
 let O_OPEN = false;
 let C_OPEN = false;
 
-// ********************
-// **Seitennavigation**
-// ********************
-// Objekt um Enumwerte für currentSide zu imitieren
-// Werte müssen den zugehörigen IDs der Buttons in der NavBar entsprechen
-const SITE = {
-  EMPTY: 'leer',
-  VORSTELLUNG_ANLEGEN: 'vorstellungAnlegen',
-  KINOSAAL_ANLEGEN: 'kinosaalAnlegen',
-  TICKETS_RESERVIEREN: 'ticketsReservieren',
-  VORSTELLUNGEN_ANZEIGEN: 'vorstellungenAnzeigen'
-};
-Object.freeze(SITE);
 // Variable für aktuell geöffnete Seite
 let CURRENTSIDE = SITE.VORSTELLUNGEN_ANZEIGEN;
 
@@ -63,80 +68,6 @@ const LISTHEIGHT_BREAKPOINTS = [500, 600];
 // 2 für '>=600px'
 let CURRENT_LISTHEIGHT_STATE;
 checkCurrentListHeightState(); // Initialisieren
-
-// ********************
-// ***Formular-Daten***
-// ********************
-// Daten zum Laden eines Formulars. Property-Keys müssen IDs der zugehörgen Buttons / Enumvariable SITE entsprechen
-const FORMULAR_TEMPLATES = {
-  ticketsReservieren: {
-    buttonId: 'ticketsReservieren',
-    inputs: [
-      {
-        description: 'Name',
-        placeholder: 'Geben Sie ihren vollen Namen ein',
-        type: 'text'
-      },
-      {
-        description: 'Vorstellung',
-        placeholder: 'Wählen Sie eine Vorstellung',
-        type: 'select',
-        options: ['Alladin 5', 'Batman vs KingKong ']
-      },
-      {
-        description: 'Anzahl Tickets',
-        placeholder: 'Wie viele Tickets wollen Sie bestellen?',
-        type: 'number'
-      }
-
-    ]
-  },
-  kinosaalAnlegen: {
-    buttonId: 'kinosaalAnlegen',
-    inputs: [
-      {
-        description: 'Name',
-        placeholder: 'Geben Sie den Namen des Kinosaals ein',
-        type: 'text'
-      },
-      {
-        description: 'Anzahl Reihen',
-        placeholder: 'Wählen Sie die Anzahl der Reihen',
-        type: 'number'
-      },
-      {
-        description: 'Anzahl Sitze pro Reihe',
-        placeholder: 'Wählen Sie die Anzahl der Sitze pro Reihe',
-        type: 'number'
-      }
-
-    ]
-  },
-  vorstellungAnlegen: {
-    buttonId: 'vorstellungAnlegen',
-    inputs: [
-      {
-        description: 'Name',
-        placeholder: 'Geben Sie den Namen der Vorstellung ein',
-        type: 'text'
-      },
-      {
-        description: 'Kinosaal',
-        placeholder: 'Geben Sie den Kinosaal ein',
-        type: 'text'
-      },
-      {
-        description: 'Uhrzeit',
-        type: 'time'
-      },
-      {
-        description: 'Datum',
-        type: 'date'
-      }
-
-    ]
-  }
-};
 
 /*
  * ---------------------------------------------------------------
@@ -257,85 +188,30 @@ function createFormFromJSON (json) {
   for (const inputJSON of json.inputs) {
     addElement(form, createFormElement(inputJSON));
   }
-  const submitButton = createElement('button', { text: 'Absenden', type:'button', id: `submitButton-${json.buttonId}`, class: 'btn btn-outline-light' });
-  submitButton.addEventListener('click', togglePopup);
+  const submitButton = createElement('button', { text: 'Absenden', type: 'button', id: `submitButton-${json.buttonId}`, class: 'btn btn-outline-light' });
+  submitButton.addEventListener('click', startSubmit);
   addElement(form, submitButton);
   return form;
 }
-console.log('Test: ', createMessage.createVorstellung);
-/**
- * Öffnet die Popupansicht (also ausgegrauter Hintergrund und Popup)
- */
-function togglePopup () {
-  // Hintergrund ausgrauen, indem ein schwarzes Div über die komplette Seite gelegt wird, welches ein bisschen durchsichtig ist
-  const body = document.getElementById('body');
-  const blurPage = createElement('div', { class: 'blurPage justify-content-center mx-auto', id: 'blurPage' });
-  // Ein klick auf den ausgegrauten Bereich schließt das Popup wieder
-  blurPage.addEventListener('click', closePopup);
-
-  // Popupdiv
-  const popupWrapper = createElement('div', {
-    class: 'popupWrapper',
-    id: 'popupWrapper'
-  });
-
-  // Problem: Klick auf Popup löst Clickevent der blurPage (siehe Zeile 226) aus
-  // Grund: Klickevents werden standardmäßig an 'unterdrunterliegende' Elemente weitergereicht
-  // Lösung: event.stopPropagation() beendet das 'weiter reichen'
-  popupWrapper.addEventListener('click', e => e.stopPropagation());
-
-  // Unterelemente fürs Popup erstellen
-  const popupHeader = createElement('div', { class: 'popupHeader', id: 'popupHeader' });
-  const popupText = createElement('div', { class: 'popupText', id: 'popupText', text: 'Vielen Dank' });
-  const popupFooter = createElement('div', { class: 'popupFooter', id: 'popupFooter' });
-  const acceptButton = createElement('button', { text: 'Alles klar', class: 'acceptButton btn btn-primary' });
-
-  // Buttonclick soll das Popup schließen
-  acceptButton.addEventListener('click', closePopup);
-
-  // Alles zusammenstecken
-  addElement(popupFooter, acceptButton);
-  addElements(popupWrapper, [popupHeader, popupText, popupFooter]);
-  addElement(blurPage, popupWrapper);
-  addElement(body, blurPage);
-
-  // Die Position des Popups ist allerdings noch nirgendwo definiert.
-  // Die Logik dafür habe ich in eine eigene Funktion verlegt
-  adjustPopupPosition();
-
-  // Probem: Das Groß- und Kleinziehen des Browserfensters bei offenem Popup verschiebt unser Menu, die Popupposition bleibt allerdings gleich
-  // Grund: Bei Öffnen des Popups wird die Position 1x fest geladen, und bleibt dann immer gleich
-  // Lösung: Position neu berechnen, jedes mal wenn sich das Browserfenster verändert
-  window.addEventListener('resize', adjustPopupPosition);
-}
 
 /**
- * Platziert das Popup horizontal zentriert, oben anliegend, im Formularteil des Menüs
- * Es wird dann noch um einen festen Wert (marginTop) nach unten geschoben
+ * Event, wenn auf den Absendbutton eines Formulars geklickt wurde
  */
-function adjustPopupPosition () {
-  // X- bzw Y-Wert der view Ränder des Formularelements
-  const formularEdges = document.getElementById('formular').getBoundingClientRect();
-
-  // Genauer Mittelpunkt des Elements
-  const midPoint = { left: Math.round((formularEdges.right + formularEdges.left) / 2)/*, top: Math.round((formularEdges.bottom + formularEdges.top)/2) */ };
-
-  const popupWrapper = document.getElementById('popupWrapper');
-  const popupWidth = popupWrapper.offsetWidth;
-  const marginTop = 10;
-
-  // Positioniert Popup neu
-  popupWrapper.style.left = Math.round(midPoint.left - popupWidth / 2) + 'px';
-  popupWrapper.style.top = Math.round(formularEdges.top + marginTop) + 'px';
-}
-
-/**
- * Schließt Poopupansicht wieder
- */
-function closePopup (_event) {
-  removeElement(document.getElementById('blurPage'));
-  // Eventlistener ist nicht mehr nötig
-  window.removeEventListener('resize', adjustPopupPosition);
+function startSubmit () {
+  togglePopup();
+  switch (CURRENTSIDE) {
+    case SITE.VORSTELLUNG_ANLEGEN:
+      createVorstellung();
+      break;
+    case SITE.KINOSAAL_ANLEGEN:
+      createKinosaal();
+      break;
+    case SITE.TICKETS_RESERVIEREN:
+      createReservierung();
+      break;
+    default:
+      console.log('Error');
+  }
 }
 
 // Liste responsive machen:
@@ -526,122 +402,5 @@ function removeListpageButtons () {
   } else if (document.getElementById('divButtonsSmall') !== null) {
     const buttonContainerSmall = document.getElementById('divButtonsSmall');
     document.body.removeChild(buttonContainerSmall);
-  }
-}
-
-/*
- * ---------------------------------------------------------------
- * -------------------------Hilfsmethoden-------------------------
- * ---------------------------------------------------------------
- */
-
-/**
- * Erzeugt neues Element, optional direkt mit Klassen, Styles oder sonstigen Attributen
- * @param {String} tagName Name des Element-Tags
- * @param {Object} attributes OPTIONAL z.B {class:"d-flex row",style:"backgroundColor:red;"}
- * @returns {Element} newElement Das neue Element
- */
-function createElement (tagName, attributes) {
-  const newElement = document.createElement(tagName);
-  for (const prop in attributes) {
-    switch (prop) {
-      case 'class':
-        for (const singleClass of attributes[prop].split(' ')) {
-          addClass(newElement, singleClass);
-        }
-        break;
-      case 'style':
-        setStyle(newElement, attributes[prop]);
-        break;
-      case 'text':
-        setText(newElement, attributes[prop]);
-        break;
-      default:
-        setAttribute(newElement, prop, attributes[prop]);
-    }
-  }
-  return newElement;
-}
-
-/**
- * Entfernt ein Element aus dem DOM-Baum
- * @param {Element} element Das zu löschende Element
- */
-function removeElement (element) {
-  element.parentElement.removeChild(element);
-}
-
-/**
- * Definiert Text innerhalb eines Elements
- * ACHTUNG:Nur für Elemente ohne Kinder verwenden
- * @param {Element} element Element in welches ein Text eingefügt wird
- * @param {String} text Text, welcher eingefügt wird
- */
-function setText (element, text) {
-  element.innerHTML = text;
-}
-
-/**
- * Definiert Style-Property für ein Element
- * @param {Element} element Element, für welches das Attribut "Style" definiert wird
- * @param {String} styleString String der Form "cssAttribute:Vvlue;cssAttribute:value;..."
- */
-function setStyle (element, styleString) {
-  element.style.cssText = styleString;
-}
-
-/**
- * Definiert beliebiges Attribut für ein Element.
- * Bereits bestehende Elemente werden überschrieben.
- * @param {Element} element Element, für welches das Attribut definiert wird
- * @param {String} key Attributname
- * @param {String} value Wert des Attributs
- */
-function setAttribute (element, key, value = key) {
-  element.setAttribute(key, value);
-}
-
-/**
- * Weißt einem Element eine Klasse zu
- * @param {Element} element Element, welchem die Klasse zugewiesen wird
- * @param {String} classString Klasse als String, welche hinzugefügt wird
- */
-function addClass (element, classString) {
-  element.classList.add(classString);
-}
-
-/**
- * Entfernt Klasse vom Element
- * @param {Element} element Element, von welchem die Klasse entfernt wird
- * @param {String} classString Klasse als String, welche entfernt wird
- */
-function removeClass (element, classString) {
-  element.classList.remove(classString);
-}
-
-/**
- * Fügt ein Element in ein anderes ein.
- * Optional lässt sich auch die Position festlegen
- * @param {Element} outer Element, in das eingefügt wird
- * @param {Element} inner Element, welches eingefügt wird
- * @param {Number} position OPTIONAL Position, an welcher eingefügt wird (0 = vorne)
- */
-function addElement (outer, inner, position) {
-  if (!outer.children || (position && outer.children.length <= position)) {
-    outer.appendChild(inner);
-  } else {
-    outer.insertBefore(inner, outer.children[position]);
-  }
-}
-
-/**
- * Fügt in ein Element ein Array aus Elementen ein.
- * Ganz analog zu addElement(), nur das mehrere Elemente gleichzeitig eingefügt werden können
- * @param {Element} outer  Element, in das eingefügt wird
- * @param {Array<Element>} arrayOfInner Array von Elementen die eingefügt werden
- */
-function addElements (outer, arrayOfInner) {
-  for (const inner of arrayOfInner) {
-    addElement(outer, inner);
   }
 }
