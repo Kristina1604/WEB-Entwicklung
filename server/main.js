@@ -10,6 +10,8 @@ const PORT = args[2];
 // statische Dateien bereit stellen, mit der Middelwarefunktion express.static
 app.use(express.static('_dist'));
 
+app.use(express.json());
+
 // Database
 const db = require('../config/database.js');
 
@@ -20,6 +22,19 @@ db.authenticate().then(function () {
   console.log('connected!');
 }).catch(function (error) {
   console.log('connection failed: ' + error);
+});
+
+//   _______________________________________________________________
+//
+//                    Vorstellungen ins Drop-Down laden
+//   _______________________________________________________________
+
+app.get('/api/load/shows', function (req, res) {
+  Model.Vorstellung.findAll({
+    attributes: ['filmname']
+  }).then(function (vorstellungs) {
+    res.json(vorstellungs);
+  });
 });
 
 //   _______________________________________________________________

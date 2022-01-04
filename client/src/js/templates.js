@@ -29,7 +29,7 @@ const FORMULAR_TEMPLATES = {
         description: 'Vorstellung',
         placeholder: 'Wählen Sie eine Vorstellung',
         type: 'select',
-        options: ['Alladin 5', 'Batman vs KingKong ']
+        options: []
       },
       {
         description: 'Anzahl Tickets',
