@@ -18,6 +18,7 @@ const {
   FORMULAR_TEMPLATES
 } = require('./templates.js');
 const togglePopup = require('./popup.js');
+const { loadShow } = require('./loadShows.js')
 /*
  * ---------------------------------------------------------------
  * -------------------------Event-Listener------------------------
@@ -167,7 +168,7 @@ function createFormFromJSON (json) {
         break;
       case 'select':
         input = createElement('select', { class: 'form-control inputField', id: inputID });
-        inputJSON.options.forEach(option => addElement(input, createElement('option', { text: option })));
+        loadShow();
         break;
       case 'number':
         input = createElement('input', { class: 'form-control inputField', type: 'number', id: inputID, placeholder: inputJSON.placeholder });
