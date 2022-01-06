@@ -8,9 +8,9 @@ async function loadShow () {
   const selectBox = document.getElementById('input-1');
 
   for (let count = 0; count < filme.length; count++) {
-    const op = document.createElement('option');
-    op.text = filme[count].filmname;
-    selectBox.options[count] = op;
+    const option = document.createElement('option');
+    option.text = filme[count].filmname;
+    selectBox.options[count] = option;
   }
 }
 

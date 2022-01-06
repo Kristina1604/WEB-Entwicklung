@@ -185,6 +185,11 @@ app.get('/api/cinemaRoom/small/:page', function (req, res) {
   });
 });
 
+// Abfangen von falschen URI's
+app.use(function (req, res) {
+  res.status(404).send('<h1>Error 404 - Hier gibts nichts zu sehen ;)<h1>');
+});
+
 // Starten des Servers an Port 8080
 
 app.listen(PORT || 3000, function () {

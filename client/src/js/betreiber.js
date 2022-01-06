@@ -18,7 +18,7 @@ const {
   FORMULAR_TEMPLATES
 } = require('./templates.js');
 const togglePopup = require('./popup.js');
-const { loadShow } = require('./loadShows.js')
+const { loadShow } = require('./loadShows.js');
 /*
  * ---------------------------------------------------------------
  * -------------------------Event-Listener------------------------
