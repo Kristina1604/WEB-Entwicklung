@@ -8,7 +8,8 @@ const SITE = {
   VORSTELLUNG_ANLEGEN: 'vorstellungAnlegen',
   KINOSAAL_ANLEGEN: 'kinosaalAnlegen',
   TICKETS_RESERVIEREN: 'ticketsReservieren',
-  VORSTELLUNGEN_ANZEIGEN: 'vorstellungenAnzeigen'
+  VORSTELLUNGEN_ANZEIGEN: 'homeButton',
+  KINOSÄLE_ANZEIGEN: 'kinosäleAnzeigen'
 };
 Object.freeze(SITE);
 

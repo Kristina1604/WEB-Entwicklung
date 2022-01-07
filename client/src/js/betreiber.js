@@ -28,7 +28,7 @@ const { loadShow } = require('./loadShows.js');
 // Eventlistener für die Hauptbuttons in der Navbar
 const primaryButtons = document.getElementsByClassName('primaryButton');
 for (let i = 0; i < primaryButtons.length; i++) {
-  primaryButtons.item(i).addEventListener('click', toggleMenu);
+  primaryButtons.item(i).addEventListener('click', handlePrimaryButtonClick);
 }
 
 // Eventlistener für Unterbuttons in der Navbar
@@ -49,11 +49,6 @@ window.addEventListener('resize', checkCurrentListHeightState);
 // ********************
 // ******Nav-Menü******
 // ********************
-// Variablen, die den aktuellen Zustand der beiden 'Dropdowns' erfassen
-// c = customer
-// o = operator
-let O_OPEN = false;
-let C_OPEN = false;
 
 // Variable für aktuell geöffnete Seite
 let CURRENTSIDE = SITE.VORSTELLUNGEN_ANZEIGEN;
@@ -77,40 +72,76 @@ checkCurrentListHeightState(); // Initialisieren
  */
 
 /**
- * Öffnet und schließt die beiden Dropdowns in der Navleiste
- * @param {Event} event Event welches Informationen über den 'Klick' des Benutzers enthält
+ * Event, bei Klick auf Hauptbutton
+ * @param {event} event
  */
-function toggleMenu (event) {
-  const currentToggle = event.target.id.charAt(0); // Evaluiert zu 'c' bei Klick auf Kunde, und zu 'o' bei Klick auf Betreiber
-  const open = currentToggle === 'c' ? C_OPEN : O_OPEN; // Übernimmt Booleanwert (auf=true,zu=false) des entsprechenden Dropdowns
-  const subButtons = document.getElementsByClassName(`${currentToggle}SubButton`); // HTMLCollection aller Dropdownitems des entsprechenden Dropdownmenüs
+function handlePrimaryButtonClick (event) {
+  const primaryButtonId = event.target.id; // => homeButton, operatorButton oder customerButton
 
+  // Alle Menüs schließen
+  closeMenu('homeButton');
+  closeMenu('operatorButton');
+  closeMenu('customerButton');
+
+  // Richtiges Menü öffnen
+  openMenu(primaryButtonId);
+
+  // Ein Klick auf Home führt auch zu einem Seitenwechsel
+  if (primaryButtonId === 'homeButton') {
+    switchSide(event);
+  }
+}
+
+/**
+ * Öffnet Menü und passt ButtonStyle an
+ * @param {id} id Id des Hauptbuttons, deren Menü geöffnet werden soll
+ */
+function openMenu (id) {
+  // Buttondesign ändern
+  addClass(document.getElementById(id), 'openPrimaryButton');
+
+  if (id === 'homeButton') {
+    return;
+  }
+
+  // Alle SubButtons auf active schalten
+  const subButtonsClass = id === 'operatorButton' ? 'oSubButton' : 'cSubButton';
+  const subButtons = document.getElementsByClassName(subButtonsClass); // HTMLCollection aller Dropdownitems des entsprechenden Dropdownmenüs
   // HTMLCollection erlaubt kein forEach(), deshalb wandle ich es in ein normales Array um
   const subButtonsArray = [];
   for (let i = 0; i < subButtons.length; i++) {
     subButtonsArray.push(subButtons.item(i));
   }
+  subButtonsArray.forEach(i => {
+    removeClass(i, 'inactive');
+    addClass(i, 'active');
+  });
+}
 
-  if (open) {
-    // Das angeklickte Menü ist offen => Menü schließen
-    subButtonsArray.forEach(i => {
-      removeClass(i, 'active');
-      addClass(i, 'inactive');
-    });
-  } else {
-    // Das angeklickte Menü ist geschlossen => Menü öffnen
-    subButtonsArray.forEach(i => {
-      removeClass(i, 'inactive');
-      addClass(i, 'active');
-    });
+/**
+ * Schließt Menü und passt ButtonStyle an
+ * @param {id} id Id des Hauptbuttons, deren Menü geschlossen werden soll
+ */
+function closeMenu (id) {
+  // Buttondesign ändern
+  removeClass(document.getElementById(id), 'openPrimaryButton');
+
+  if (id === 'homeButton') {
+    return;
   }
 
-  // Die richtige Booleanvariable muss noch geflipt werden
-  currentToggle === 'c' ? C_OPEN = !C_OPEN : O_OPEN = !O_OPEN;
-
-  // Ein geöffneter Hauptbutton soll etwas heller als ein geschlossener sein
-  const primaryButton = document.getElementById(currentToggle === 'c' ? 'customerButton' : 'operatorButton');
-  open ? removeClass(primaryButton, 'openPrimaryButton') : addClass(primaryButton, 'openPrimaryButton');
+  // Alle SubButtons auf inactive schalten
+  const subButtonsClass = id === 'operatorButton' ? 'oSubButton' : 'cSubButton';
+  const subButtons = document.getElementsByClassName(subButtonsClass); // HTMLCollection aller Dropdownitems des entsprechenden Dropdownmenüs
+  // HTMLCollection erlaubt kein forEach(), deshalb wandle ich es in ein normales Array um
+  const subButtonsArray = [];
+  for (let i = 0; i < subButtons.length; i++) {
+    subButtonsArray.push(subButtons.item(i));
+  }
+  subButtonsArray.forEach(i => {
+    removeClass(i, 'active');
+    addClass(i, 'inactive');
+  });
 }
 
 /**
@@ -136,6 +167,8 @@ function switchSide (event) {
   // Passendes Formular laden
   if (newSite === SITE.VORSTELLUNGEN_ANZEIGEN) {
     loadPresentationList();
+  } else if (newSite === SITE.KINOSÄLE_ANZEIGEN) {
+    loadRoomList();
   } else {
     addElement(formularWrapper, createFormFromJSON(FORMULAR_TEMPLATES[newSite]));
   }
@@ -243,12 +276,14 @@ function checkCurrentListHeightState () {
     // Wenn wir uns gerade auf der Liste befinden, muss diese neu geladen werden
     if (CURRENTSIDE === SITE.VORSTELLUNGEN_ANZEIGEN) {
       loadPresentationList();
+    } else if (CURRENTSIDE === SITE.KINOSÄLE_ANZEIGEN) {
+      loadRoomList();
     }
   }
 }
 
 /**
- * Läd und aktualisiert Liste und Listenlayout (Einträge pro Seite, Anzahl Seitenbuttons)
+ * Läd und aktualisiert Liste und Listenlayout für Vorstellungen (Einträge pro Seite, Anzahl Seitenbuttons)
  */
 function loadPresentationList () {
   // Die Funktionen für die verschiedenen Layouts unterscheiden sich nur in wenigen Punkten
@@ -372,10 +407,56 @@ function loadPresentationList () {
 }
 
 /**
- * TODO:
- * loadRoomList()
- *
- *    function listItemTemplate (kino) {
+ * Läd und aktualisiert Liste und Listenlayout für Kinosääle (Einträge pro Seite, Anzahl Seitenbuttons)
+ */
+function loadRoomList () {
+  console.log('loadRoomList');
+  // Die Funktionen für die verschiedenen Layouts unterscheiden sich nur in wenigen Punkten
+  // Die Variablen dafür werden in den folgenden Zeilen definiert
+  let entriesPerSite;
+  let fetchPath;
+  let buttonContainerId;
+  let additionalButtonClasses;
+
+  switch (CURRENT_LISTHEIGHT_STATE) {
+    case 0:
+      // Small
+      entriesPerSite = 1;
+      fetchPath = '/api/cinemaRoom/small/';
+      buttonContainerId = 'divButtonsSmall';
+      additionalButtonClasses = 'btn-sm';
+      break;
+    case 1:
+      // Medium
+      entriesPerSite = 2;
+      fetchPath = '/api/cinemaRoom/medium/';
+      buttonContainerId = 'divButtonsMedium';
+      additionalButtonClasses = '';
+      break;
+    case 2:
+      // Large
+      entriesPerSite = 3;
+      fetchPath = '/api/cinemaRoom/large/';
+      buttonContainerId = 'divButtonsLarge';
+      additionalButtonClasses = '';
+      break;
+  }
+
+  // Ab hier müsste dir alles bekannt vorkommen
+  // Die einzigen Unterschiede ab jetzt sind
+  // 1. Die Verwendung der oben definierten Variablen (entriesPerSite,fetchPath,...),
+  // um die 3 Fälle (small, medium, large) unterscheiden zu können
+  // 2. Die removeListpageButtons-Funktion, die aber das selbe macht wie dein Code davor.
+  // Ich musste sie nur auslagern, um die Buttons auch beim Wechsel auf eine Formularseite entfernen zu können
+
+  async function getData () {
+    const page = 1;
+    const response = await window.fetch(fetchPath + `${page}`);
+    const data = await response.json();
+
+    console.log(data);
+
+    function listItemTemplate (kino) {
       return `
               <div class= "border border-info rounded flex-items-container">
                   <div class= "container-name"> ${kino.kinoname} </div>
@@ -388,7 +469,63 @@ function loadPresentationList () {
               </div>
               `;
     }
- */
+    document.getElementById('formular').innerHTML = `
+
+          <p class="font-weight-bold">${data.count} Einträge - Seite 1 von ${Math.ceil(data.count / entriesPerSite)}</p>
+          ${data.rows.map(listItemTemplate).join('')}
+
+          `;
+
+    // prüfen ob ein Button Container existiert, wenn ja dann lösche ihn...
+    removeListpageButtons();
+
+    // ...und erstelle einen neuen
+    const containerButtons = document.createElement('div');
+    containerButtons.setAttribute('id', buttonContainerId);
+    containerButtons.className = 'buttonContainer';
+
+    for (let page = 1; page <= `${Math.ceil(data.count / entriesPerSite)}`; page++) {
+      const button = document.createElement('button');
+      button.innerHTML = page;
+      button.className = 'btn btn-outline-light ' + additionalButtonClasses;
+      button.value = page;
+      button.addEventListener('click', buttonFunction);
+
+      containerButtons.appendChild(button);
+    }
+
+    document.body.appendChild(containerButtons);
+
+    function buttonFunction () {
+      const page = this.value;
+
+      getData();
+      async function getData () {
+        const response = await window.fetch(fetchPath + `${page}`);
+        const data = await response.json();
+
+        function listItemTemplate (kino) {
+          return `
+                  <div class= "border border-info rounded flex-items-container">
+                      <div class= "container-name"> ${kino.kinoname} </div>
+                      <div class="container-info">
+                        Sitzreihen: ${kino.sitzreihen}
+                        </br>
+                        Sitze pro Sitzreihe: ${kino.sitze}
+                      </div>
+    
+                  </div>
+                  `;
+        }
+        document.getElementById('formular').innerHTML = `
+
+                    <p class="font-weight-bold">${data.count} Einträge - Seite ${page} von ${Math.ceil(data.count / entriesPerSite)}</p>
+                    ${data.rows.map(listItemTemplate).join('')}`;
+      }
+    }
+  }
+  getData();
+}
 
 /**
  * Entfernt Buttons für den Seitenwechsel der Liste (wenn vorhanden)
