@@ -454,8 +454,6 @@ function loadRoomList () {
     const response = await window.fetch(fetchPath + `${page}`);
     const data = await response.json();
 
-    console.log(data);
-
     function listItemTemplate (kino) {
       return `
               <div class= "border border-info rounded flex-items-container">

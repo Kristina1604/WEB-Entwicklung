@@ -145,7 +145,7 @@ app.get('/api/cinemaRoom/large/:page', function (req, res) {
   const LIMIT = 3;
 
   const num = req.params.page;
-  Model.Vorstellung.findAndCountAll({
+  Model.Kinosaal.findAndCountAll({
     offset: (num - 1) * LIMIT,
     limit: LIMIT
   }).then(function (kinos) {
@@ -160,7 +160,7 @@ app.get('/api/cinemaRoom/medium/:page', function (req, res) {
   const LIMIT = 2;
 
   const num = req.params.page;
-  Model.Vorstellung.findAndCountAll({
+  Model.Kinosaal.findAndCountAll({
     offset: (num - 1) * LIMIT,
     limit: LIMIT
   }).then(function (kinos) {
@@ -175,7 +175,7 @@ app.get('/api/cinemaRoom/small/:page', function (req, res) {
   const LIMIT = 1;
 
   const num = req.params.page;
-  Model.Vorstellung.findAndCountAll({
+  Model.Kinosaal.findAndCountAll({
     offset: (num - 1) * LIMIT,
     limit: LIMIT
   }).then(function (kinos) {
