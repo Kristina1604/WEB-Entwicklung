@@ -34,7 +34,7 @@ for (let i = 0; i < primaryButtons.length; i++) {
 // Eventlistener für Unterbuttons in der Navbar
 const subButtons = document.getElementsByClassName('subButton');
 for (let i = 0; i < subButtons.length; i++) {
-  subButtons.item(i).addEventListener('click', switchSide);
+  subButtons.item(i).addEventListener('click', handleNavButtonClick);
 }
 
 // Listener, der jedes Mal, wenn die Fenstergröße sich ändert, feuert
@@ -88,7 +88,7 @@ function handlePrimaryButtonClick (event) {
 
   // Ein Klick auf Home führt auch zu einem Seitenwechsel
   if (primaryButtonId === 'homeButton') {
-    switchSide(event);
+    handleNavButtonClick(event);
   }
 }
 
@@ -145,14 +145,20 @@ function closeMenu (id) {
 }
 
 /**
- * Koordiniert "Seitenwechsel" (Richtiges Formular laden)
+ * Koordiniert Klick auf Button für "Seitenwechsel"
  * @param {Event} event  Event beim Klick auf Unterbutton in der Navbar
- * @returns
  */
-function switchSide (event) {
+function handleNavButtonClick (event) {
   // Seite, die angeklickt wurde
   const newSite = event.target.id;
+  switchSite(newSite);
+}
 
+/**
+ * Koordiniert "Seitenwechsel" (Richtiges Formular laden)
+ * @param {String} newSite Name der neuen Seite
+ */
+function switchSite (newSite) {
   // Klick auf Seite, die bereits offen ist, hat keine Wirkung
   if (newSite === CURRENTSIDE) {
     return;
@@ -232,15 +238,17 @@ function createFormFromJSON (json) {
  * Event, wenn auf den Absendbutton eines Formulars geklickt wurde
  */
 function startSubmit () {
-  togglePopup();
   switch (CURRENTSIDE) {
     case SITE.VORSTELLUNG_ANLEGEN:
+      togglePopup();
       createVorstellung();
       break;
     case SITE.KINOSAAL_ANLEGEN:
+      togglePopup();
       createKinosaal();
       break;
     case SITE.TICKETS_RESERVIEREN:
+      handleNavButtonClick();
       createReservierung();
       break;
     default:
