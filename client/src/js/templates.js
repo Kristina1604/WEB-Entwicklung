@@ -9,7 +9,8 @@ const SITE = {
   KINOSAAL_ANLEGEN: 'kinosaalAnlegen',
   TICKETS_RESERVIEREN: 'ticketsReservieren',
   VORSTELLUNGEN_ANZEIGEN: 'homeButton',
-  KINOSÄLE_ANZEIGEN: 'kinosäleAnzeigen'
+  KINOSÄLE_ANZEIGEN: 'kinosäleAnzeigen',
+  TICKETS_BESTÄTIGEN: 'ticketsBestätigen'
 };
 Object.freeze(SITE);
 

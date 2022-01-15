@@ -114,6 +114,7 @@ module.exports = {
   createElement: createElement,
   removeElement: removeElement,
   addClass: addClass,
+  setText: setText,
   removeClass: removeClass,
   addElement: addElement,
   addElements: addElements
