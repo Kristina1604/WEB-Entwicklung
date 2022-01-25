@@ -109,7 +109,6 @@ h2{
   //Diese Variablen können beliebig angepasst werden
   //Solange git: wrapper-height > ueberschrift-height && wrapper-width > navleiste-width
   @margin-top:50px;
-  @wrapper-height:600px;
   @wrapper-width:1000px;
   @caption-height:100px;
   @navbar-width:250px;
@@ -141,7 +140,6 @@ h2{
     //Alles umschließendes DIV
     margin: auto;
     margin-top:@margin-top;
-    height: @wrapper-height;
     width: @wrapper-width;
     box-sizing: border-box;
     border: @border-outer solid @border-color;
@@ -157,34 +155,20 @@ h2{
   #inhalt {
     //Umschließendes unteres Element. Enthält Navleiste und Contentfeld
     display: flex;
-    height: @wrapper-height - @caption-height - @border-inner;
     width: @wrapper-width - (2*@border-outer);
   }
   #navleiste {
     //Navleiste links
-    height: @wrapper-height - @caption-height - @border-inner;
     width: @navbar-width;
     box-sizing: border-box;
     border-right: @border-inner solid @border-color;
   }
-  .navleistenBereich {
-    //Bereich für einen Hauptbutton inklusive seiner Menüpunkte
-    height: 150px;
-  }
+
   #formular {
     //Contentbereich für z.B Inputfelder, Listen und vielem mehr
-    height: @wrapper-height - @caption-height - @border-inner;
     width: @wrapper-width - @navbar-width
   }
 
-  #operatorButton{
-    margin-top: 8%;
-  }
-
-  #customerButton{
-    margin-top: 12%;
-
-  }
 
    //Die beiden Hauptbuttons 'Betreiber' und 'Kunde'
   .primaryButton {
@@ -195,10 +179,9 @@ h2{
     border-radius: 3px;
     text-align: center;
     margin-left: 5%;
-    margin-bottom:1px;
+    margin-top:10px;
     color: @primaryButtons;
     box-sizing: border-box;
-    // border: 2px white;
     box-shadow: none;
   }
   .primaryButton:hover{
@@ -207,9 +190,7 @@ h2{
     border: 2px solid @white;
     box-shadow: none;
   }
-  .primaryButton:first-child{
-    margin-top: 1px;
-  }
+
   //Geöffneter Hauptbutton
   .openPrimaryButton {
     background-color: @primaryButtonOpenFont;
@@ -228,7 +209,6 @@ h2{
   //Unterbuttons
   .oSubButton, .cSubButton {
     text-align: center;
-    margin-bottom:10px;
     color:@white;
     width:90%;
     margin-left: 5%;
