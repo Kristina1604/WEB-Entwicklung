@@ -1,11 +1,17 @@
 
 function createVorstellung () {
+  // ---Daten lesen
+
+  // aus Inputfeldern
   const filmName = document.getElementById('input-0').value;
   const kinoSaal = document.getElementById('input-1').value;
   const zeit = document.getElementById('input-2').value;
   const kalendertag = document.getElementById('input-3').value;
+  // To-Do
+  // const alleKinos = fetch()
 
-  const vorstellung = { filmName, kinoSaal, zeit, kalendertag };
+  // ---Paket packen
+  const vorstellung = { filmName, kinoSaal, zeit, kalendertag /* , restplätze */ };
   console.log(vorstellung);
 
   window.fetch('/addVorstellung', {
@@ -39,6 +45,10 @@ function createKinosaal () {
 }
 
 async function createReservierung () {
+  // To-Do
+  // const alleVorstellungen = fetch()
+  // const restPläetze...
+
   const nameKunde = document.getElementById('input-0').value;
 
   const selectBox = document.getElementById('input-1');
@@ -57,6 +67,9 @@ async function createReservierung () {
     body: JSON.stringify(reservierung)
 
   });
+
+  // To-Do
+  // ticketsabziehen(kinokarten)
 }
 
 exports.createVorstellung = createVorstellung;
