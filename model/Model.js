@@ -32,7 +32,11 @@ const Vorstellung = db.define('vorstellung', {
   },
   filmname: {
     type: Sequelize.STRING
+  },
+  restplaetze: {
+    type: Sequelize.INTEGER
   }
+
 });
 
 const Reservierung = db.define('reservierung', {
