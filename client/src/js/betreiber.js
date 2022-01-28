@@ -176,8 +176,6 @@ function switchSite (newSite) {
     loadPresentationList();
   } else if (newSite === SITE.KINOSÄLE_ANZEIGEN) {
     loadRoomList();
-  } else if (newSite === SITE.TICKETS_BESTÄTIGEN) {
-    addElement(formularWrapper, createQrCodeSite());
   } else {
     addElement(formularWrapper, createFormFromJSON(FORMULAR_TEMPLATES[newSite]));
   }
@@ -276,7 +274,6 @@ function startSubmit () {
       break;
     case SITE.TICKETS_RESERVIEREN:
       createReservierung();
-      switchSite(SITE.TICKETS_BESTÄTIGEN);
       break;
     default:
       console.log('Error');
