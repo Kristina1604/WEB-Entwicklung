@@ -10,7 +10,6 @@ const {
   createElement,
   addClass,
   removeClass,
-  setText,
   addElement,
   addElements
 } = require('./domHelper.js');
@@ -181,30 +180,6 @@ function switchSite (newSite) {
   }
 }
 
-function createQrCodeSite () {
-  const wrapper = createElement('div');
-  const text = createElement('div');
-  setText(text, 'Vielen Dank');
-  const qrCode = getQrCodeCode();
-  addElements(wrapper, [text, qrCode]);
-  return wrapper;
-}
-
-function getQrCodeCode () {
-  const QRCode = require('qrcode');
-  const serverResponse = { name: 'Max Mustermann', anzahl: 1, Vorstellung: 'MusterVorstlelung' };
-  const canvas = createElement('canvas', { width: '300px', height: '300px' });
-  const container = createElement('div');
-  addElement(container, canvas);
-  const errorFn = function (error) {
-    if (error) {
-      console.log(error);
-    }
-  };
-  QRCode.toCanvas(canvas, JSON.stringify(serverResponse), errorFn);
-  return container;
-}
-
 function clearCurrentSite () {
   const formularWrapper = document.getElementById('formular');
   formularWrapper.innerHTML = '';
@@ -265,14 +240,15 @@ function createFormFromJSON (json) {
 function startSubmit () {
   switch (CURRENTSIDE) {
     case SITE.VORSTELLUNG_ANLEGEN:
-      togglePopup();
+      togglePopup(CURRENTSIDE);
       createVorstellung();
       break;
     case SITE.KINOSAAL_ANLEGEN:
-      togglePopup();
+      togglePopup(CURRENTSIDE);
       createKinosaal();
       break;
     case SITE.TICKETS_RESERVIEREN:
+      togglePopup(CURRENTSIDE);
       createReservierung();
       break;
     default:

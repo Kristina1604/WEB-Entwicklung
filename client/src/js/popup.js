@@ -2,12 +2,16 @@ const {
   createElement,
   removeElement,
   addElement,
-  addElements
+  addElements,
+  addClass
 } = require('./domHelper.js');
+
+const { SITE } = require('./templates.js');
+const { createQrDiv } = require('./qrCode.js');
 /**
  * Öffnet die Popupansicht (also ausgegrauter Hintergrund und Popup)
 */
-function togglePopup () {
+function togglePopup (currentSite) {
   // Hintergrund ausgrauen, indem ein schwarzes Div über die komplette Seite gelegt wird, welches ein bisschen durchsichtig ist
   const body = document.getElementById('body');
   const blurPage = createElement('div', { class: 'blurPage justify-content-center mx-auto', id: 'blurPage' });
@@ -26,9 +30,9 @@ function togglePopup () {
   popupWrapper.addEventListener('click', e => e.stopPropagation());
 
   // Unterelemente fürs Popup erstellen
-  const popupHeader = createElement('div', { class: 'popupHeader', id: 'popupHeader' });
-  const popupText = createElement('div', { class: 'popupText', id: 'popupText', text: 'Vielen Dank' });
-  const popupFooter = createElement('div', { class: 'popupFooter', id: 'popupFooter' });
+  const popupHeader = createElement('div', { class: 'popupHeader', text: 'Vielen Dank!' });
+  const popupContent = createPopupContent(currentSite);
+  const popupFooter = createElement('div', { class: 'popupFooter' });
   const acceptButton = createElement('button', { text: 'Alles klar', class: 'acceptButton btn btn-primary' });
 
   // Buttonclick soll das Popup schließen
@@ -36,7 +40,7 @@ function togglePopup () {
 
   // Alles zusammenstecken
   addElement(popupFooter, acceptButton);
-  addElements(popupWrapper, [popupHeader, popupText, popupFooter]);
+  addElements(popupWrapper, [popupHeader, popupContent, popupFooter]);
   addElement(blurPage, popupWrapper);
   addElement(body, blurPage);
 
@@ -48,6 +52,32 @@ function togglePopup () {
   // Grund: Bei Öffnen des Popups wird die Position 1x fest geladen, und bleibt dann immer gleich
   // Lösung: Position neu berechnen, jedes mal wenn sich das Browserfenster verändert
   window.addEventListener('resize', adjustPopupPosition);
+}
+
+function createPopupContent (currentSite) {
+  let content;
+  // Läd Inhalt für Popup
+  switch (currentSite) {
+    case SITE.KINOSAAL_ANLEGEN:
+      content = createElement('div', { text: 'Neuer Kinosaal erfolgreich angelegt' });
+      break;
+    case SITE.VORSTELLUNG_ANLEGEN:
+      content = createElement('div', { text: 'Neue Vorstellung erfolgreich angelegt' });
+      break;
+    case SITE.TICKETS_RESERVIEREN:
+      content = createElement('div', { text: 'Ticket reserviert. Weitere Informationen finden Sie hier:' });
+      addElement(content, createQrDiv(getInputData()));
+      break;
+  }
+  addClass(content, 'popupContent');
+  return content;
+}
+
+function getInputData () {
+  const name = document.getElementById('input-0').value;
+  const vorstellung = document.getElementById('input-1').value;
+  const anzahlTickets = document.getElementById('input-2').value;
+  return { name, vorstellung, anzahlTickets };
 }
 
 /**
