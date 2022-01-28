@@ -48,7 +48,7 @@ function setText (element, text) {
 /**
  * Definiert Style-Property für ein Element
  * @param {Element} element Element, für welches das Attribut "Style" definiert wird
- * @param {String} styleString String der Form "cssAttribute:Vvlue;cssAttribute:value;..."
+ * @param {String} styleString String der Form "cssAttribute:value;cssAttribute:value;..."
  */
 function setStyle (element, styleString) {
   element.style.cssText = styleString;
