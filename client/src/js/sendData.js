@@ -1,4 +1,6 @@
 
+const { getInputValues } = require('./inputManager.js');
+
 //   _______________________________________________________________
 //
 //                      Neue Vorstellung eintragen
@@ -6,17 +8,11 @@
 
 async function createVorstellung () {
   // Daten lesen aus Inputfeldern
-  const filmName = document.getElementById('input-0').value;
-  const kinoSaal = document.getElementById('input-1').value;
-  const zeit = document.getElementById('input-2').value;
-  const kalendertag = document.getElementById('input-3').value;
-
+  const [filmName, kinoSaal, zeit, kalendertag] = getInputValues();
   // alle Kinos anfordern
   const response = await window.fetch('/api/getCinemas');
   const gesamtKinos = await response.json();
 
-  console.log('Gesamtkinos: ', gesamtKinos);
-  console.log('Kinosaal: ', kinoSaal);
   // gesamtSitze der gesuchen Vorstellung auslesen
   const gesuchtesKino = gesamtKinos.find(kinoObjekt => kinoObjekt.kinoname === kinoSaal);
   const restplaetze = gesuchtesKino.gesamtsitze;
@@ -41,10 +37,7 @@ async function createVorstellung () {
 //   _______________________________________________________________
 
 function createKinosaal () {
-  const kinoName = document.getElementById('input-0').value;
-  const sitzreihen = document.getElementById('input-1').value;
-  const sitzeplätze = document.getElementById('input-2').value;
-
+  const [kinoName, sitzreihen, sitzeplätze] = getInputValues();
   const sitzeKomplett = sitzeplätze * sitzreihen;
 
   const kinosaal = { kinoName, sitzreihen, sitzeplätze, sitzeKomplett };
@@ -67,11 +60,8 @@ function createKinosaal () {
 
 async function createReservierung () {
   // Daten lesen aus Inputfeldern
-  const nameKunde = document.getElementById('input-0').value;
-  const selectBox = document.getElementById('input-1');
-  const filmtitel = selectBox.options[selectBox.selectedIndex].text;
-  const kinokarten = parseInt(document.getElementById('input-2').value);
-
+  let [nameKunde, filmtitel, kinokarten] = getInputValues();
+  kinokarten = parseInt(kinokarten);
   const response = await window.fetch('/api/getShows');
   const gesamtVorstellungen = await response.json();
 

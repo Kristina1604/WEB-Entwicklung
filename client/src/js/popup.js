@@ -8,15 +8,18 @@ const {
 
 const { SITE } = require('./templates.js');
 const { createQrDiv } = require('./qrCode.js');
+const { getInputValues } = require('./inputManager.js');
 /**
  * Öffnet die Popupansicht (also ausgegrauter Hintergrund und Popup)
+ * @param {String} currentSite Aktuelle Seite, damit die Funktion weiß, welches Popup geladen werden soll
+ * @param {Function} closeFn Funktion, die bei schließen des Popups aufgerufen wird
 */
-function togglePopup (currentSite) {
+function togglePopup (currentSite, closeFn = () => {}) {
   // Hintergrund ausgrauen, indem ein schwarzes Div über die komplette Seite gelegt wird, welches ein bisschen durchsichtig ist
   const body = document.getElementById('body');
   const blurPage = createElement('div', { class: 'blurPage justify-content-center mx-auto', id: 'blurPage' });
   // Ein klick auf den ausgegrauten Bereich schließt das Popup wieder
-  blurPage.addEventListener('click', closePopup);
+  blurPage.addEventListener('click', () => { closePopup(); closeFn(); });
 
   // Popupdiv
   const popupWrapper = createElement('div', {
@@ -36,7 +39,7 @@ function togglePopup (currentSite) {
   const acceptButton = createElement('button', { text: 'Alles klar', class: 'acceptButton btn btn-primary' });
 
   // Buttonclick soll das Popup schließen
-  acceptButton.addEventListener('click', closePopup);
+  acceptButton.addEventListener('click', () => { closePopup(); closeFn(); });
 
   // Alles zusammenstecken
   addElement(popupFooter, acceptButton);
@@ -54,6 +57,10 @@ function togglePopup (currentSite) {
   window.addEventListener('resize', adjustPopupPosition);
 }
 
+/**
+ * @param {String} currentSite Aktuelle Seite
+ * @returns {HTMLElement} Div für Popupkontent
+ */
 function createPopupContent (currentSite) {
   let content;
   // Läd Inhalt für Popup
@@ -73,11 +80,17 @@ function createPopupContent (currentSite) {
   return content;
 }
 
+/**
+ * Gibt String zum Erstellen des QR-Codes zurück
+ * @returns {String} Datenstring für QR-Code
+ */
 function getInputData () {
-  const name = document.getElementById('input-0').value;
-  const vorstellung = document.getElementById('input-1').value;
-  const anzahlTickets = document.getElementById('input-2').value;
-  return { name, vorstellung, anzahlTickets };
+  const [name, vorstellung, anzahlTickets] = getInputValues();
+  return {
+    Kundenname: name,
+    'Name der Vorstellung': vorstellung,
+    'Anzahl der gebuchten Tickets': anzahlTickets
+  };
 }
 
 /**
