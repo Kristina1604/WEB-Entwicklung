@@ -71,7 +71,7 @@ async function createReservierung () {
   const nameKunde = document.getElementById('input-0').value;
   const selectBox = document.getElementById('input-1');
   const filmtitel = selectBox.options[selectBox.selectedIndex].text;
-  const kinokarten = document.getElementById('input-2').value;
+  const kinokarten = parseInt(document.getElementById('input-2').value);
 
   const response = await window.fetch('/api/getShows');
   const gesamtVorstellungen = await response.json();
