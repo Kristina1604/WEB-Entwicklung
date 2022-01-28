@@ -72,8 +72,9 @@ const FORMULAR_TEMPLATES = {
       },
       {
         description: 'Kinosaal',
-        placeholder: 'Geben Sie den Kinosaal ein',
-        type: 'text'
+        placeholder: 'Wählen Sie einen Kinosaal',
+        type: 'select',
+        options: []
       },
       {
         description: 'Uhrzeit',
