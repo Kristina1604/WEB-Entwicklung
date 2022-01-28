@@ -7,10 +7,7 @@
 async function createVorstellung () {
   // Daten lesen aus Inputfeldern
   const filmName = document.getElementById('input-0').value;
-
-  const selectBox = document.getElementById('input-1');
-  const kinoSaal = selectBox.options[selectBox.selectedIndex].text;
-
+  const kinoSaal = document.getElementById('input-1').value;
   const zeit = document.getElementById('input-2').value;
   const kalendertag = document.getElementById('input-3').value;
 
@@ -18,6 +15,8 @@ async function createVorstellung () {
   const response = await window.fetch('/api/getCinemas');
   const gesamtKinos = await response.json();
 
+  console.log('Gesamtkinos: ', gesamtKinos);
+  console.log('Kinosaal: ', kinoSaal);
   // gesamtSitze der gesuchen Vorstellung auslesen
   const gesuchtesKino = gesamtKinos.find(kinoObjekt => kinoObjekt.kinoname === kinoSaal);
   const restplaetze = gesuchtesKino.gesamtsitze;
