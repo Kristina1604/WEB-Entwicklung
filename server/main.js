@@ -37,6 +37,60 @@ app.get('/api/load/shows', function (req, res) {
   });
 });
 
+app.get('/api/load/cinemas', function (req, res) {
+  Model.Kinosaal.findAll({
+    attributes: ['kinoname']
+  }).then(function (kinos) {
+    res.json(kinos);
+  });
+});
+
+//   _______________________________________________________________
+//
+//                      Alle Kinosäle anfordern
+//   _______________________________________________________________
+
+app.get('/api/getCinemas', function (req, res) {
+  Model.Kinosaal.findAll({
+
+  }).then(function (kinos) {
+    res.json(kinos);
+  }).catch(function (error) {
+    console.log(error);
+  });
+});
+
+//   _______________________________________________________________
+//
+//                      Alle Vorstellungen anfordern
+//   _______________________________________________________________
+
+app.get('/api/getShows', function (req, res) {
+  Model.Vorstellung.findAll({
+
+  }).then(function (vorstellungs) {
+    res.json(vorstellungs);
+  }).catch(function (error) {
+    console.log(error);
+  });
+});
+
+//   _______________________________________________________________
+//
+//                      Restplätze updaten
+//   _______________________________________________________________
+
+app.put('/api/restplaetze/:showId', function (req, res) {
+  Model.Vorstellung.update(
+    { restplaetze: req.body.restplatz },
+    { where: { id: req.params.showId } }
+  ).then(function (result) {
+    console.log('Success:', result);
+  }).catch(function (error) {
+    console.log(error);
+  });
+});
+
 //   _______________________________________________________________
 //
 //                    Formulardaten senden
@@ -67,7 +121,8 @@ app.post('/addVorstellung', function (req, res) {
     filmname: req.body.filmName,
     kinosaal: req.body.kinoSaal,
     uhrzeit: req.body.zeit,
-    datum: req.body.kalendertag
+    datum: req.body.kalendertag,
+    restplaetze: req.body.restplaetze
 
   });
 });

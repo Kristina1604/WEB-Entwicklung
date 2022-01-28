@@ -19,6 +19,7 @@ const {
 } = require('./templates.js');
 const togglePopup = require('./popup.js');
 const { loadShow } = require('./loadShows.js');
+const { loadCinema } = require('./loadCinema.js');
 /*
  * ---------------------------------------------------------------
  * -------------------------Event-Listener------------------------
@@ -207,7 +208,11 @@ function createFormFromJSON (json) {
         break;
       case 'select':
         input = createElement('select', { class: 'form-control inputField', id: inputID });
-        loadShow();
+        if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
+          loadShow();
+        } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
+          loadCinema();
+        }
         break;
       case 'number':
         input = createElement('input', { class: 'form-control inputField', type: 'number', id: inputID, placeholder: inputJSON.placeholder });

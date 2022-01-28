@@ -1,17 +1,29 @@
 
-function createVorstellung () {
-  // ---Daten lesen
+//   _______________________________________________________________
+//
+//                      Neue Vorstellung eintragen
+//   _______________________________________________________________
 
-  // aus Inputfeldern
+async function createVorstellung () {
+  // Daten lesen aus Inputfeldern
   const filmName = document.getElementById('input-0').value;
-  const kinoSaal = document.getElementById('input-1').value;
+
+  const selectBox = document.getElementById('input-1');
+  const kinoSaal = selectBox.options[selectBox.selectedIndex].text;
+
   const zeit = document.getElementById('input-2').value;
   const kalendertag = document.getElementById('input-3').value;
-  // To-Do
-  // const alleKinos = fetch()
+
+  // alle Kinos anfordern
+  const response = await window.fetch('/api/getCinemas');
+  const gesamtKinos = await response.json();
+
+  // gesamtSitze der gesuchen Vorstellung auslesen
+  const gesuchtesKino = gesamtKinos.find(kinoObjekt => kinoObjekt.kinoname === kinoSaal);
+  const restplaetze = gesuchtesKino.gesamtsitze;
 
   // ---Paket packen
-  const vorstellung = { filmName, kinoSaal, zeit, kalendertag /* , restplätze */ };
+  const vorstellung = { filmName, kinoSaal, zeit, kalendertag, restplaetze };
   console.log(vorstellung);
 
   window.fetch('/addVorstellung', {
@@ -23,6 +35,11 @@ function createVorstellung () {
 
   });
 }
+
+//   _______________________________________________________________
+//
+//                      Neuen Kinosaal eintragen
+//   _______________________________________________________________
 
 function createKinosaal () {
   const kinoName = document.getElementById('input-0').value;
@@ -44,18 +61,29 @@ function createKinosaal () {
   });
 }
 
+//   _______________________________________________________________
+//
+//                      Neue Reservierung eintragen
+//   _______________________________________________________________
+
 async function createReservierung () {
-  // To-Do
-  // const alleVorstellungen = fetch()
-  // const restPläetze...
-
+  // Daten lesen aus Inputfeldern
   const nameKunde = document.getElementById('input-0').value;
-
   const selectBox = document.getElementById('input-1');
   const filmtitel = selectBox.options[selectBox.selectedIndex].text;
-
   const kinokarten = document.getElementById('input-2').value;
 
+  const response = await window.fetch('/api/getShows');
+  const gesamtVorstellungen = await response.json();
+
+  // restplätze und id der gesuchten vorstellung auslesen
+  const gesuchteVorstellung = gesamtVorstellungen.find(vorstellungObjekt => vorstellungObjekt.filmname === filmtitel);
+  const restplatz = gesuchteVorstellung.restplaetze - kinokarten;
+  const id = gesuchteVorstellung.id;
+
+  // prüfen ob die Restplätze für die gebuchten tickets ausreichen
+
+  // ---Paket packen
   const reservierung = { filmtitel, kinokarten, nameKunde };
   console.log(reservierung);
 
@@ -70,6 +98,18 @@ async function createReservierung () {
 
   // To-Do
   // ticketsabziehen(kinokarten)
+
+  const restplaetze = { restplatz };
+  console.log('Objekt: ', restplaetze);
+
+  window.fetch('/api/restplaetze/' + `${id}`, {
+
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(restplaetze)
+  });
 }
 
 exports.createVorstellung = createVorstellung;
