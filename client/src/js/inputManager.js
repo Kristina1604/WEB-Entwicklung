@@ -20,14 +20,6 @@ function getInputs () {
 }
 
 /**
- * Gibt alle Werte der aktuellen Inputs als Array zurück
- * @returns {Array<String>}
- */
-function getInputValues () {
-  return getInputs().map(input => input.value);
-}
-
-/**
  * Leert alle aktuellen Inputs
  */
 function clearInputs () {
@@ -36,6 +28,5 @@ function clearInputs () {
 
 module.exports = {
   getInputs: getInputs,
-  getInputValues: getInputValues,
   clearInputs: clearInputs
 };

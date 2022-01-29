@@ -20,7 +20,6 @@ const {
 const togglePopup = require('./popup.js');
 const { loadShow } = require('./loadShows.js');
 const { loadCinema } = require('./loadCinema.js');
-const { clearInputs } = require('./inputManager.js');
 /*
  * ---------------------------------------------------------------
  * -------------------------Event-Listener------------------------
@@ -246,15 +245,15 @@ function createFormFromJSON (json) {
 function startSubmit () {
   switch (CURRENTSIDE) {
     case SITE.VORSTELLUNG_ANLEGEN:
-      togglePopup(CURRENTSIDE, clearInputs);
+      togglePopup(CURRENTSIDE);
       createVorstellung();
       break;
     case SITE.KINOSAAL_ANLEGEN:
-      togglePopup(CURRENTSIDE, clearInputs);
+      togglePopup(CURRENTSIDE);
       createKinosaal();
       break;
     case SITE.TICKETS_RESERVIEREN:
-      togglePopup(CURRENTSIDE, clearInputs);
+      togglePopup(CURRENTSIDE);
       createReservierung();
       break;
     default:

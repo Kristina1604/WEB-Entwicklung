@@ -8,18 +8,18 @@ const {
 
 const { SITE } = require('./templates.js');
 const { createQrDiv } = require('./qrCode.js');
-const { getInputValues } = require('./inputManager.js');
+const { clearInputs } = require('./inputManager.js');
 /**
  * Öffnet die Popupansicht (also ausgegrauter Hintergrund und Popup)
  * @param {String} currentSite Aktuelle Seite, damit die Funktion weiß, welches Popup geladen werden soll
  * @param {Function} closeFn Funktion, die bei schließen des Popups aufgerufen wird
 */
-function togglePopup (currentSite, closeFn = () => {}) {
+function togglePopup (currentSite) {
   // Hintergrund ausgrauen, indem ein schwarzes Div über die komplette Seite gelegt wird, welches ein bisschen durchsichtig ist
   const body = document.getElementById('body');
   const blurPage = createElement('div', { class: 'blurPage justify-content-center mx-auto', id: 'blurPage' });
   // Ein klick auf den ausgegrauten Bereich schließt das Popup wieder
-  blurPage.addEventListener('click', () => { closePopup(); closeFn(); });
+  blurPage.addEventListener('click', () => { closePopup(); clearInputs(); });
 
   // Popupdiv
   const popupWrapper = createElement('div', {
@@ -39,7 +39,7 @@ function togglePopup (currentSite, closeFn = () => {}) {
   const acceptButton = createElement('button', { text: 'Alles klar', class: 'acceptButton btn btn-primary' });
 
   // Buttonclick soll das Popup schließen
-  acceptButton.addEventListener('click', () => { closePopup(); closeFn(); });
+  acceptButton.addEventListener('click', () => { closePopup(); clearInputs(); });
 
   // Alles zusammenstecken
   addElement(popupFooter, acceptButton);
@@ -85,7 +85,9 @@ function createPopupContent (currentSite) {
  * @returns {String} Datenstring für QR-Code
  */
 function getInputData () {
-  const [name, vorstellung, anzahlTickets] = getInputValues();
+  const name = document.getElementById('input-0').value;
+  const vorstellung = document.getElementById('input-1').value;
+  const anzahlTickets = document.getElementById('input-2').value;
   return {
     Kundenname: name,
     'Name der Vorstellung': vorstellung,

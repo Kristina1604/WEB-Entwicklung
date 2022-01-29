@@ -1,6 +1,3 @@
-
-const { getInputValues } = require('./inputManager.js');
-
 //   _______________________________________________________________
 //
 //                      Neue Vorstellung eintragen
@@ -8,7 +5,11 @@ const { getInputValues } = require('./inputManager.js');
 
 async function createVorstellung () {
   // Daten lesen aus Inputfeldern
-  const [filmName, kinoSaal, zeit, kalendertag] = getInputValues();
+  const filmName = document.getElementById('input-0').value;
+  const kinoSaal = document.getElementById('input-1').value;
+  const zeit = document.getElementById('input-2').value;
+  const kalendertag = document.getElementById('input-3').value;
+
   // alle Kinos anfordern
   const response = await window.fetch('/api/getCinemas');
   const gesamtKinos = await response.json();
@@ -37,7 +38,10 @@ async function createVorstellung () {
 //   _______________________________________________________________
 
 function createKinosaal () {
-  const [kinoName, sitzreihen, sitzeplätze] = getInputValues();
+  const kinoName = document.getElementById('input-0').value;
+  const sitzreihen = document.getElementById('input-1').value;
+  const sitzeplätze = document.getElementById('input-2').value;
+
   const sitzeKomplett = sitzeplätze * sitzreihen;
 
   const kinosaal = { kinoName, sitzreihen, sitzeplätze, sitzeKomplett };
@@ -60,8 +64,10 @@ function createKinosaal () {
 
 async function createReservierung () {
   // Daten lesen aus Inputfeldern
-  let [nameKunde, filmtitel, kinokarten] = getInputValues();
-  kinokarten = parseInt(kinokarten);
+  const nameKunde = document.getElementById('input-0').value;
+  const filmtitel = document.getElementById('input-1').value;
+  const kinokarten = parseInt(document.getElementById('input-2').value);
+
   const response = await window.fetch('/api/getShows');
   const gesamtVorstellungen = await response.json();
 
