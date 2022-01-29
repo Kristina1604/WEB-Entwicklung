@@ -280,7 +280,6 @@ function handleSubmitClick (event) {
   }
 }
 
-
 /**
  * Event, wenn auf den Absendbutton eines Formulars geklickt wurde
  */
