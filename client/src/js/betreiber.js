@@ -204,10 +204,20 @@ function createFormFromJSON (json) {
     let input;
     switch (inputJSON.type) {
       case 'text':
-        input = createElement('input', { class: 'form-control inputField', type: 'text', id: inputID, placeholder: inputJSON.placeholder, required: inputJSON.required });
+        input = createElement('input', {
+          class: 'form-control inputField',
+          type: 'text',
+          id: inputID,
+          placeholder: inputJSON.placeholder,
+          required: inputJSON.required
+        });
         break;
       case 'select':
-        input = createElement('select', { class: 'form-control inputField', id: inputID, required: inputJSON.required });
+        input = createElement('select', {
+          class: 'form-control inputField',
+          id: inputID,
+          required: inputJSON.required
+        });
         if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
           loadShow();
         } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
@@ -215,13 +225,29 @@ function createFormFromJSON (json) {
         }
         break;
       case 'number':
-        input = createElement('input', { class: 'form-control inputField', type: 'number', id: inputID, placeholder: inputJSON.placeholder, required: inputJSON.required });
+        input = createElement('input', {
+          class: 'form-control inputField',
+          type: 'number',
+          id: inputID,
+          placeholder: inputJSON.placeholder,
+          required: inputJSON.required
+        });
         break;
       case 'date':
-        input = createElement('input', { class: 'form-control inputField', type: 'date', id: inputID, required: inputJSON.required });
+        input = createElement('input', {
+          class: 'form-control inputField',
+          type: 'date',
+          id: inputID,
+          required: inputJSON.required
+        });
         break;
       case 'time':
-        input = createElement('input', { class: 'form-control inputField', type: 'time', id: inputID, required: inputJSON.required });
+        input = createElement('input', {
+          class: 'form-control inputField',
+          type: 'time',
+          id: inputID,
+          required: inputJSON.required
+        });
         break;
     }
 
