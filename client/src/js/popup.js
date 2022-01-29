@@ -12,7 +12,6 @@ const { clearInputs } = require('./inputManager.js');
 /**
  * Öffnet die Popupansicht (also ausgegrauter Hintergrund und Popup)
  * @param {String} currentSite Aktuelle Seite, damit die Funktion weiß, welches Popup geladen werden soll
- * @param {Function} closeFn Funktion, die bei schließen des Popups aufgerufen wird
 */
 function togglePopup (currentSite) {
   // Hintergrund ausgrauen, indem ein schwarzes Div über die komplette Seite gelegt wird, welches ein bisschen durchsichtig ist
