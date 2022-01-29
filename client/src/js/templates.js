@@ -53,7 +53,7 @@ const FORMULAR_TEMPLATES = {
         placeholder: 'Geben Sie den Namen des Kinosaals ein',
         type: 'text',
         required: true,
-        errorText: 'Sie müssen dem Kinonamen einen Namen geben'
+        errorText: 'Sie müssen dem Kino einen Namen geben'
       },
       {
         description: 'Anzahl Reihen',
