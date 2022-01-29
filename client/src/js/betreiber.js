@@ -204,10 +204,10 @@ function createFormFromJSON (json) {
     let input;
     switch (inputJSON.type) {
       case 'text':
-        input = createElement('input', { class: 'form-control inputField', type: 'text', id: inputID, placeholder: inputJSON.placeholder });
+        input = createElement('input', { class: 'form-control inputField', type: 'text', id: inputID, placeholder: inputJSON.placeholder, required: inputJSON.required });
         break;
       case 'select':
-        input = createElement('select', { class: 'form-control inputField', id: inputID });
+        input = createElement('select', { class: 'form-control inputField', id: inputID, required: inputJSON.required });
         if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
           loadShow();
         } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
@@ -215,29 +215,71 @@ function createFormFromJSON (json) {
         }
         break;
       case 'number':
-        input = createElement('input', { class: 'form-control inputField', type: 'number', id: inputID, placeholder: inputJSON.placeholder });
+        input = createElement('input', { class: 'form-control inputField', type: 'number', id: inputID, placeholder: inputJSON.placeholder, required: inputJSON.required });
         break;
       case 'date':
-        input = createElement('input', { class: 'form-control inputField', type: 'date', id: inputID });
+        input = createElement('input', { class: 'form-control inputField', type: 'date', id: inputID, required: inputJSON.required });
         break;
       case 'time':
-        input = createElement('input', { class: 'form-control inputField', type: 'time', id: inputID });
+        input = createElement('input', { class: 'form-control inputField', type: 'time', id: inputID, required: inputJSON.required });
         break;
     }
+
+    // Kleiner roter Text, der bei ungültiger Eingabe angezeigt wird
+    // Sofern ein Errortext für dieses Feld definiert ist, wird dieser angezeigt,
+    // ansonsten wird der Placeholdertextangezeigt (siehe templates.js)
+    const tooltip = createElement('div', { class: 'invalid-tooltip', text: inputJSON.errorText || inputJSON.placeholder });
+
+    // Input und Tooltip müssen in ein Div mit bestimmten Bootstrapklassen gepackt werden
+    const inputWrapper = createElement('div', { class: 'input-group has-validation' });
+
+    // Alles zusammenstecken
+    addElements(inputWrapper, [input, tooltip]);
+    addElements(wrapper, [label, inputWrapper]);
+
+    // Counter hochzählen (für eindeutige IDs)
     idCounter++;
-    addElements(wrapper, [label, input]);
     return wrapper;
   };
   // <form>-Element erstellen und füllen
-  const form = createElement('form', { class: 'p-4', id: 'form' });
+  const form = createElement('form', { class: 'p-4 needs-validation', id: 'form' });
   for (const inputJSON of json.inputs) {
     addElement(form, createFormElement(inputJSON));
   }
   const submitButton = createElement('button', { text: 'Absenden', type: 'button', id: `submitButton-${json.buttonId}`, class: 'btn btn-outline-light' });
-  submitButton.addEventListener('click', startSubmit);
+  submitButton.addEventListener('click', handleSubmitClick);
   addElement(form, submitButton);
   return form;
 }
+
+/**
+ * Wird bei Klick auf Absenden aufgerufen und schaut ob das Formular korrekt ist:
+ * Formular korrekt --> Absenden an Datenbank
+ * Formular inkorrekt --> Fehlerhafte Fehler anzeigen
+ * @param {Event} event Klickevent
+ */
+function handleSubmitClick (event) {
+  // Holt sich Button und Form
+  const submitButton = event.target;
+  const form = submitButton.parentNode;
+
+  // Boolean, ob Eingaben ok
+  const isOk = form.checkValidity();
+  if (isOk) {
+    // Antrag abschicken
+    startSubmit();
+
+    // Falls das Formular abgeschickt wird, nachdem der Benutzer seine EIngaben korrigieren musste,
+    // befindet sich die Form immernoch im 'Leuchtmodus' (alles Falsche popt auf)
+    // Da nach dem Abschicken das Formular geleert wird, würden viele Felder direkt rot aufleuchten
+    // Das muss nicht sein --> Leuchtmodus verlassen
+    removeClass(form, 'was-validated');
+  } else {
+    // Form wechselt in den 'Leuchtmodus' (alles Falsche popt auf)
+    addClass(form, 'was-validated');
+  }
+}
+
 
 /**
  * Event, wenn auf den Absendbutton eines Formulars geklickt wurde
