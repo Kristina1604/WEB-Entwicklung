@@ -23,7 +23,11 @@ function getInputs () {
  * Leert alle aktuellen Inputs
  */
 function clearInputs () {
-  getInputs().forEach(input => { input.value = ''; });
+  getInputs().forEach(input => {
+    if (input.nodeName !== 'SELECT') {
+      input.value = '';
+    }
+  });
 }
 
 module.exports = {
