@@ -18,8 +18,8 @@ const {
   FORMULAR_TEMPLATES
 } = require('./templates.js');
 const togglePopup = require('./popup.js');
-const { loadShow } = require('./loadShows.js');
-const { loadCinema } = require('./loadCinema.js');
+const { getShows } = require('./getShows.js');
+const { getCinemas } = require('./getCinemas.js');
 /*
  * ---------------------------------------------------------------
  * -------------------------Event-Listener------------------------
@@ -159,7 +159,7 @@ function handleNavButtonClick (event) {
  * Koordiniert "Seitenwechsel" (Richtiges Formular laden)
  * @param {String} newSite Name der neuen Seite
  */
-function switchSite (newSite) {
+async function switchSite (newSite) {
   // Klick auf Seite, die bereits offen ist, hat keine Wirkung
   if (newSite === CURRENTSIDE) {
     return;
@@ -177,7 +177,8 @@ function switchSite (newSite) {
   } else if (newSite === SITE.KINOSÄLE_ANZEIGEN) {
     loadRoomList();
   } else {
-    addElement(formularWrapper, createFormFromJSON(FORMULAR_TEMPLATES[newSite]));
+    const form = await createFormFromJSON(FORMULAR_TEMPLATES[newSite]);
+    addElement(formularWrapper, form);
   }
 }
 
@@ -193,10 +194,10 @@ function clearCurrentSite () {
  * @param {Object} json Object mit allen Informationen, um daraus eine <form> zu generieren
  * @returns {HTMLElement}
  */
-function createFormFromJSON (json) {
+async function createFormFromJSON (json) {
   let idCounter = 0; // Zählvariable, um eindeutige IDs generieren zu können
   // Erstellt einzelnen Inputabschnitt (Beschreibung des Inputs und Input selbst)
-  const createFormElement = function (inputJSON) {
+  const createFormElement = async function (inputJSON) {
     const inputID = `input-${idCounter}`;
 
     const wrapper = createElement('div', { class: 'form-group' });
@@ -219,9 +220,13 @@ function createFormFromJSON (json) {
           required: inputJSON.required
         });
         if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
-          loadShow();
+          const shows = await getShows();
+          const options = shows.map(show => createElement('option', { text: show.filmname }));
+          addElements(input, options);
         } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
-          loadCinema();
+          const cinemas = await getCinemas();
+          const options = cinemas.map(cinema => createElement('option', { text: cinema.kinoname }));
+          addElements(input, options);
         }
         break;
       case 'number':
@@ -270,7 +275,7 @@ function createFormFromJSON (json) {
   // <form>-Element erstellen und füllen
   const form = createElement('form', { class: 'p-4 needs-validation', id: 'form' });
   for (const inputJSON of json.inputs) {
-    addElement(form, createFormElement(inputJSON));
+    addElement(form, await createFormElement(inputJSON));
   }
   const submitButton = createElement('button', { text: 'Absenden', type: 'button', id: `submitButton-${json.buttonId}`, class: 'btn btn-outline-light' });
   submitButton.addEventListener('click', handleSubmitClick);
