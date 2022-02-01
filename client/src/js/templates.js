@@ -38,7 +38,7 @@ const FORMULAR_TEMPLATES = {
       {
         description: 'Anzahl Tickets',
         placeholder: 'Wie viele Tickets wollen Sie bestellen?',
-        errorText: 'Eingabe ist ungültig',
+        errorText: 'Diese Anzahl Tickets kann leider nicht gebucht werden',
         type: 'number',
         required: true
       }
@@ -53,7 +53,7 @@ const FORMULAR_TEMPLATES = {
         placeholder: 'Geben Sie den Namen des Kinosaals ein',
         type: 'text',
         required: true,
-        errorText: 'Sie müssen dem Kino einen Namen geben'
+        errorText: 'Sie müssen dem Kino einen eindeutigen Namen geben'
       },
       {
         description: 'Anzahl Reihen',
@@ -77,7 +77,8 @@ const FORMULAR_TEMPLATES = {
         description: 'Name',
         placeholder: 'Geben Sie den Namen der Vorstellung ein',
         type: 'text',
-        required: true
+        required: true,
+        errorText: 'Sie müssen der Vorstellung einen eindeutigen Namen geben'
       },
       {
         description: 'Kinosaal',

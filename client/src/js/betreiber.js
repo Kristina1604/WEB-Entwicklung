@@ -20,6 +20,7 @@ const {
 const togglePopup = require('./popup.js');
 const { getShows } = require('./getShows.js');
 const { getCinemas } = require('./getCinemas.js');
+const { getInputs } = require('./inputManager.js');
 /*
  * ---------------------------------------------------------------
  * -------------------------Event-Listener------------------------
@@ -173,13 +174,16 @@ async function switchSite (newSite) {
 
   // Passendes Formular laden
   if (newSite === SITE.VORSTELLUNGEN_ANZEIGEN) {
-    loadPresentationList();
+    await loadPresentationList();
   } else if (newSite === SITE.KINOSÄLE_ANZEIGEN) {
-    loadRoomList();
+    await loadRoomList();
   } else {
     const form = await createFormFromJSON(FORMULAR_TEMPLATES[newSite]);
     addElement(formularWrapper, form);
   }
+
+  // Formular-Eventlistener anhängen
+  await attachFormularEventlisteners();
 }
 
 function clearCurrentSite () {
@@ -284,21 +288,128 @@ async function createFormFromJSON (json) {
 }
 
 /**
+ * Setzt benötigte Eventlistener an Inputfelder. Dies ist in zwei Fällen von Feldern notwendig
+ * 1. Das Inputfeld hat eine spezielle Validierungsbedingung
+ *    z.b Kinoname noch nicht vorhanden, Ticketanzahl noch verfügbar
+ * 2. Der Inhalt des Feldes beeinflusst die Validierungsfunktion anderer Felder
+ *    Ob die Eingabe in 'Anzahl Tickets' ok ist, hängt damit zusammen, welcher Film im Dropdown ausgewählt ist
+ */
+async function attachFormularEventlisteners () {
+  // ------- Interne Hilfsfunktionen -------
+
+  /**
+   * Setzt Felder in den Fehlermodus(roter Rand, Meldung), oder entfernt Fehlermodus
+   * @param {HTMLElement} element Element, wessen Validierungszustand gesetzt werden soll
+   * @param {Boolean}} isOk Ob Element in Ordnung ist, oder ob Fehlermodus angezeigt werden soll
+   */
+  const manageValidationState = function (element, isOk) {
+    if (isOk) {
+      removeClass(element, 'is-invalid');
+    } else {
+      addClass(element, 'is-invalid');
+    }
+  };
+
+  /**
+   * Fügt Eventlistener an Element an.
+   * Alle davor angehangenen Eventlistener werden entfernt
+   * @param {HTMLElement} element Element, für welches der Eventlistener (neu) gesetzt wird
+   * @param {Function} fn Neuer Eventlistener
+   * @param {String} eventName Name des Events (z.B 'change' oder 'click')
+   */
+  const refreshEvent = function (element, fn, eventName) {
+    // Für detachEventListener() fehlt hier die Referenz auf die Funktion...
+    // Durch Ersetzen des Elements durch cloneNode() werden allerdings auch alle Eventlistener entfernt
+    const replacedElement = element.cloneNode(true);
+    element.replaceWith(replacedElement);
+
+    // Neuen Listener setzen
+    replacedElement.addEventListener(eventName, fn);
+  };
+
+  // ------- Eigentliches Programm -------
+  if (CURRENTSIDE === SITE.KINOSAAL_ANLEGEN) {
+    // ------- Kinoname muss eindeutig sein -------
+    const nameInput = document.getElementById('input-0');
+    // Alle bereits verwendeten Kinonamen
+    const allCinemas = await getCinemas();
+    const occupiedNames = allCinemas.map(cinema => cinema.kinoname);
+    // Neuer Eventlistener
+    const eventListener = function (event) {
+      const element = event.target;
+      const currentValue = element.value;
+      const isOk = occupiedNames.every(name => name !== currentValue);
+      manageValidationState(element, isOk);
+    };
+    // Eventlistener anhängen
+    refreshEvent(nameInput, eventListener, 'input');
+  } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
+    // ------- Vorstellungsname muss eindeutig sein -------
+    const nameInput = document.getElementById('input-0');
+    // Alle bereits verwendetenVorstellungsnamen
+    const allShows = await getShows();
+    const occupiedNames = allShows.map(show => show.filmname);
+    // Neuer Eventlistener
+    const eventListener = function (event) {
+      const element = event.target;
+      const currentValue = element.value;
+      const isOk = occupiedNames.every(name => name !== currentValue);
+      manageValidationState(element, isOk);
+    };
+    // Eventlistener anhängen
+    refreshEvent(nameInput, eventListener, 'input');
+  } else if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
+    // ------- Wahl von neuer Vorstellung im Dropdown muss Validierungsfunktion con AnzahlTickets neu setzen -------
+    const dropdown = document.getElementById('input-1');
+    refreshEvent(dropdown, attachFormularEventlisteners, 'change');
+
+    // ------- Anzahl Tickets muss verfügbar sein -------
+    // Anzahl Restplätze für aktuell ausgewählte Vorstellung abfragen
+    const currentShowName = dropdown.value;
+    const allShows = await getShows();
+    const currentShow = allShows.find(show => show.filmname === currentShowName);
+    const maxTickets = currentShow.restplaetze;
+
+    const ticketInput = document.getElementById('input-2');
+    // Neuer Eventlistener
+    const eventListener = function (event) {
+      const element = event.target;
+      const currentValue = element.value;
+      const isOk = !currentValue || (currentValue > 0 && currentValue <= maxTickets);
+      manageValidationState(element, isOk);
+    };
+    // Eventlistener anhängen
+    refreshEvent(ticketInput, eventListener, 'input');
+  }
+}
+
+/**
  * Wird bei Klick auf Absenden aufgerufen und schaut ob das Formular korrekt ist:
  * Formular korrekt --> Absenden an Datenbank
  * Formular inkorrekt --> Fehlerhafte Fehler anzeigen
  * @param {Event} event Klickevent
  */
-function handleSubmitClick (event) {
+async function handleSubmitClick (event) {
   // Holt sich Button und Form
   const submitButton = event.target;
   const form = submitButton.parentNode;
 
-  // Boolean, ob Eingaben ok
-  const isOk = form.checkValidity();
+  // Es müssen zwei Bedingungen erfüllt sein, damit das Formular abgesendet werden kann:
+  // 1. Alle Pflichtfelder müssen gefüllt sein
+  const checkRequiredFieldsStatus = function () {
+    return form.checkValidity();
+  };
+  // Alle Sonderbedingungen (Eindeutige Namen, Tickets verfügbar) müssen erfüllt sein
+  const checkSpecialConditionsStatus = function () {
+    const allInputs = getInputs();
+    return allInputs.every(input => !input.classList.contains('is-invalid'));
+  };
+  // Boolean, ob Bedingungen erfüllt
+  const isOk = checkRequiredFieldsStatus() && checkSpecialConditionsStatus();
+
   if (isOk) {
     // Antrag abschicken
-    startSubmit();
+    await startSubmit();
 
     // Falls das Formular abgeschickt wird, nachdem der Benutzer seine EIngaben korrigieren musste,
     // befindet sich die Form immernoch im 'Leuchtmodus' (alles Falsche popt auf)
@@ -314,23 +425,24 @@ function handleSubmitClick (event) {
 /**
  * Event, wenn auf den Absendbutton eines Formulars geklickt wurde
  */
-function startSubmit () {
+async function startSubmit () {
   switch (CURRENTSIDE) {
     case SITE.VORSTELLUNG_ANLEGEN:
       togglePopup(CURRENTSIDE);
-      createVorstellung();
+      await createVorstellung();
       break;
     case SITE.KINOSAAL_ANLEGEN:
       togglePopup(CURRENTSIDE);
-      createKinosaal();
+      await createKinosaal();
       break;
     case SITE.TICKETS_RESERVIEREN:
       togglePopup(CURRENTSIDE);
-      createReservierung();
+      await createReservierung();
       break;
     default:
       console.log('Error');
   }
+  await attachFormularEventlisteners();
 }
 
 // Liste responsive machen:
@@ -370,7 +482,7 @@ function checkCurrentListHeightState () {
 /**
  * Läd und aktualisiert Liste und Listenlayout für Vorstellungen (Einträge pro Seite, Anzahl Seitenbuttons)
  */
-function loadPresentationList () {
+async function loadPresentationList () {
   // Die Funktionen für die verschiedenen Layouts unterscheiden sich nur in wenigen Punkten
   // Die Variablen dafür werden in den folgenden Zeilen definiert
   let entriesPerSite;
@@ -494,7 +606,7 @@ function loadPresentationList () {
 /**
  * Läd und aktualisiert Liste und Listenlayout für Kinosääle (Einträge pro Seite, Anzahl Seitenbuttons)
  */
-function loadRoomList () {
+async function loadRoomList () {
   console.log('loadRoomList');
   // Die Funktionen für die verschiedenen Layouts unterscheiden sich nur in wenigen Punkten
   // Die Variablen dafür werden in den folgenden Zeilen definiert
