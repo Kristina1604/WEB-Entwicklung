@@ -1,5 +1,5 @@
 async function getCinemas () {
-  const response = await window.fetch('/api/load/cinemas');
+  const response = await window.fetch('/api/getCinemas');
   const cinema = await response.json();
   return cinema;
 }

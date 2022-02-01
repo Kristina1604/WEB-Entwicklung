@@ -26,27 +26,6 @@ db.authenticate().then(function () {
 
 //   _______________________________________________________________
 //
-//                    Vorstellungen ins Drop-Down laden
-//   _______________________________________________________________
-
-app.get('/api/load/shows', function (req, res) {
-  Model.Vorstellung.findAll({
-    attributes: ['filmname']
-  }).then(function (vorstellungs) {
-    res.json(vorstellungs);
-  });
-});
-
-app.get('/api/load/cinemas', function (req, res) {
-  Model.Kinosaal.findAll({
-    attributes: ['kinoname']
-  }).then(function (kinos) {
-    res.json(kinos);
-  });
-});
-
-//   _______________________________________________________________
-//
 //                      Alle Kinosäle anfordern
 //   _______________________________________________________________
 
