@@ -25,20 +25,18 @@ const FORMULAR_TEMPLATES = {
         description: 'Name',
         placeholder: 'Geben Sie ihren vollen Namen ein',
         type: 'text',
-        required: true,
-        errorText: 'Sie müssen Ihren Namen angeben'
+        required: true
       },
       {
         description: 'Vorstellung',
         placeholder: 'Wählen Sie eine Vorstellung',
         type: 'select',
-        required: true,
+        required: false,
         options: []
       },
       {
         description: 'Anzahl Tickets',
         placeholder: 'Wie viele Tickets wollen Sie bestellen?',
-        errorText: 'Diese Anzahl Tickets kann leider nicht gebucht werden',
         type: 'number',
         required: true
       }
@@ -52,8 +50,7 @@ const FORMULAR_TEMPLATES = {
         description: 'Name',
         placeholder: 'Geben Sie den Namen des Kinosaals ein',
         type: 'text',
-        required: true,
-        errorText: 'Sie müssen dem Kino einen eindeutigen Namen geben'
+        required: true
       },
       {
         description: 'Anzahl Reihen',
@@ -77,8 +74,7 @@ const FORMULAR_TEMPLATES = {
         description: 'Name',
         placeholder: 'Geben Sie den Namen der Vorstellung ein',
         type: 'text',
-        required: true,
-        errorText: 'Sie müssen der Vorstellung einen eindeutigen Namen geben'
+        required: true
       },
       {
         description: 'Kinosaal',
@@ -90,14 +86,12 @@ const FORMULAR_TEMPLATES = {
       {
         description: 'Uhrzeit',
         type: 'time',
-        required: true,
-        errorText: 'Um wie viel Uhr findet die Vorstellung statt?'
+        required: true
       },
       {
         description: 'Datum',
         type: 'date',
-        required: true,
-        errorText: 'An welchem Datum findet die Vorstellung statt?'
+        required: true
       }
 
     ]
