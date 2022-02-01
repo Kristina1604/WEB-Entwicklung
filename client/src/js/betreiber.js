@@ -373,31 +373,47 @@ async function attachFormularEventlisteners () {
     // Eventlistener anhängen
     refreshEvent(nameInput, eventListener, 'input');
   } else if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
-    // ------- Wahl von neuer Vorstellung im Dropdown muss Validierungsfunktion con AnzahlTickets neu setzen -------
-    const dropdown = document.getElementById('input-1');
-    refreshEvent(dropdown, attachFormularEventlisteners, 'change');
-
     // ------- Anzahl Tickets muss verfügbar sein -------
-    // Anzahl Restplätze für aktuell ausgewählte Vorstellung abfragen
-    const currentShowName = dropdown.value;
-    const allShows = await getShows();
-    const currentShow = allShows.find(show => show.filmname === currentShowName);
-    const maxTickets = currentShow.restplaetze;
 
-    const ticketInput = document.getElementById('input-2');
-    const eventListener = function (event) {
-      const element = event.target;
-      const currentValue = element.value;
-      const isPositive = currentValue > 0;
-      const isAvailable = currentValue <= maxTickets;
-      const errorText = !isPositive
-        ? 'Geben Sie bitte eine positive Zahl ein'
-        : `Es sind leider nur noch ${maxTickets} Tickets verfügbar`;
-      const isOk = !currentValue || (isPositive && isAvailable);
-      manageValidationState(element, isOk, errorText);
+    /**
+     * Setzt Eventlistener für den TicketInput, welcher schaut, ob die Eingabe in Ordnung ist
+     * oder ob ein Fehlertext angezeigt werden soll
+     */
+    const attachTicketCountValidator = async function (_event) {
+      // Anzahl Restplätze für aktuell ausgewählte Vorstellung abfragen
+      const dropdown = document.getElementById('input-1');
+      const currentShowName = dropdown.value;
+      const allShows = await getShows();
+      const currentShow = allShows.find(show => show.filmname === currentShowName);
+      const maxTickets = currentShow.restplaetze;
+
+      const ticketInput = document.getElementById('input-2');
+
+      // Ticketinput initial leer, ohne Error (Also auch bei Dropdownwechsel)
+      ticketInput.value = '';
+      manageValidationState(ticketInput, true);
+
+      const eventListener = function (event) {
+        const element = event.target;
+        const currentValue = element.value;
+        const isPositive = currentValue > 0;
+        const isAvailable = currentValue <= maxTickets;
+        const errorText = !isPositive
+          ? 'Geben Sie bitte eine positive Zahl ein'
+          : `Es sind leider nur noch ${maxTickets} Tickets verfügbar`;
+        const isOk = !currentValue || (isPositive && isAvailable);
+        manageValidationState(element, isOk, errorText);
+      };
+      // Eventlistener anhängen
+      refreshEvent(ticketInput, eventListener, 'input');
     };
-    // Eventlistener anhängen
-    refreshEvent(ticketInput, eventListener, 'input');
+
+    // Validierfunktion initial setzen
+    attachTicketCountValidator();
+
+    // ------- Wahl von neuer Vorstellung im Dropdown muss Validierungsfunktion von AnzahlTickets neu setzen -------
+    const dropdown = document.getElementById('input-1');
+    refreshEvent(dropdown, attachTicketCountValidator, 'change');
   }
 }
 
