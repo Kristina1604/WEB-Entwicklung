@@ -300,12 +300,16 @@ async function attachFormularEventlisteners () {
   /**
    * Setzt Felder in den Fehlermodus(roter Rand, Meldung), oder entfernt Fehlermodus
    * @param {HTMLElement} element Element, wessen Validierungszustand gesetzt werden soll
-   * @param {Boolean}} isOk Ob Element in Ordnung ist, oder ob Fehlermodus angezeigt werden soll
+   * @param {Boolean} isOk Ob Element in Ordnung ist, oder ob Fehlermodus angezeigt werden soll
+   * @param {String} errorText Text der Fehlermeldung
    */
-  const manageValidationState = function (element, isOk) {
+  const manageValidationState = function (element, isOk, errorText) {
+    const errorElement = element.nextSibling;
     if (isOk) {
+      errorElement.innerHTML = 'Pflichtfeld';
       removeClass(element, 'is-invalid');
     } else {
+      errorElement.innerHTML = errorText;
       addClass(element, 'is-invalid');
     }
   };
@@ -334,27 +338,37 @@ async function attachFormularEventlisteners () {
     // Alle bereits verwendeten Kinonamen
     const allCinemas = await getCinemas();
     const occupiedNames = allCinemas.map(cinema => cinema.kinoname);
-    // Neuer Eventlistener
-    const eventListener = function (event) {
+    const eventListenerName = function (event) {
       const element = event.target;
       const currentValue = element.value;
       const isOk = occupiedNames.every(name => name !== currentValue);
-      manageValidationState(element, isOk);
+      manageValidationState(element, isOk, 'Dieser Name ist bereits vergeben');
     };
     // Eventlistener anhängen
-    refreshEvent(nameInput, eventListener, 'input');
+    refreshEvent(nameInput, eventListenerName, 'input');
+    // ------- Anzahl Reihen/Sitze pro Reihe müssen positiv sein -------
+    const rowInput = document.getElementById('input-1');
+    const colInput = document.getElementById('input-2');
+    const eventListenerPosInput = function (event) {
+      const element = event.target;
+      const currentValue = element.value;
+      const isOk = !currentValue || currentValue > 0;
+      manageValidationState(element, isOk, 'Geben Sie bitte eine positive Zahl ein');
+    };
+    // Eventlistener anhängen
+    refreshEvent(rowInput, eventListenerPosInput, 'input');
+    refreshEvent(colInput, eventListenerPosInput, 'input');
   } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
     // ------- Vorstellungsname muss eindeutig sein -------
     const nameInput = document.getElementById('input-0');
     // Alle bereits verwendetenVorstellungsnamen
     const allShows = await getShows();
     const occupiedNames = allShows.map(show => show.filmname);
-    // Neuer Eventlistener
     const eventListener = function (event) {
       const element = event.target;
       const currentValue = element.value;
       const isOk = occupiedNames.every(name => name !== currentValue);
-      manageValidationState(element, isOk);
+      manageValidationState(element, isOk, 'Dieser Name ist bereits vergeben');
     };
     // Eventlistener anhängen
     refreshEvent(nameInput, eventListener, 'input');
@@ -371,12 +385,16 @@ async function attachFormularEventlisteners () {
     const maxTickets = currentShow.restplaetze;
 
     const ticketInput = document.getElementById('input-2');
-    // Neuer Eventlistener
     const eventListener = function (event) {
       const element = event.target;
       const currentValue = element.value;
-      const isOk = !currentValue || (currentValue > 0 && currentValue <= maxTickets);
-      manageValidationState(element, isOk);
+      const isPositive = currentValue > 0;
+      const isAvailable = currentValue <= maxTickets;
+      const errorText = !isPositive
+        ? 'Geben Sie bitte eine positive Zahl ein'
+        : `Es sind leider nur noch ${maxTickets} Tickets verfügbar`;
+      const isOk = !currentValue || (isPositive && isAvailable);
+      manageValidationState(element, isOk, errorText);
     };
     // Eventlistener anhängen
     refreshEvent(ticketInput, eventListener, 'input');
