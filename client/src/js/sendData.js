@@ -37,7 +37,7 @@ async function createVorstellung () {
 //                      Neuen Kinosaal eintragen
 //   _______________________________________________________________
 
-function createKinosaal () {
+async function createKinosaal () {
   const kinoName = document.getElementById('input-0').value;
   const sitzreihen = document.getElementById('input-1').value;
   const sitzeplätze = document.getElementById('input-2').value;
