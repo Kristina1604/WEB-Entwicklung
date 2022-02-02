@@ -7,6 +7,9 @@ const {
   createVorstellung, createKinosaal, createReservierung
 } = require('./sendData.js');
 const {
+  loadShows, loadCinemas
+} = require('./loadData.js');
+const {
   createElement,
   addClass,
   removeClass,
@@ -18,8 +21,6 @@ const {
   FORMULAR_TEMPLATES
 } = require('./templates.js');
 const togglePopup = require('./popup.js');
-const { getShows } = require('./getShows.js');
-const { getCinemas } = require('./getCinemas.js');
 const { getInputs } = require('./inputManager.js');
 /*
  * ---------------------------------------------------------------
@@ -224,13 +225,9 @@ async function createFormFromJSON (json) {
           required: inputJSON.required
         });
         if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
-          const shows = await getShows();
-          const options = shows.map(show => createElement('option', { text: show.filmname }));
-          addElements(input, options);
+          loadShows();
         } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
-          const cinemas = await getCinemas();
-          const options = cinemas.map(cinema => createElement('option', { text: cinema.kinoname }));
-          addElements(input, options);
+          loadCinemas();
         }
         break;
       case 'number':

@@ -26,6 +26,27 @@ db.authenticate().then(function () {
 
 //   _______________________________________________________________
 //
+//                    Vorstellungen ins Drop-Down laden
+//   _______________________________________________________________
+
+app.get('/api/loadShows', function (req, res) {
+  Model.Vorstellung.findAll({
+    attributes: ['filmname']
+  }).then(function (vorstellungs) {
+    res.json(vorstellungs);
+  });
+});
+
+app.get('/api/loadCinemas', function (req, res) {
+  Model.Kinosaal.findAll({
+    attributes: ['kinoname']
+  }).then(function (kinos) {
+    res.json(kinos);
+  });
+});
+
+//   _______________________________________________________________
+//
 //                      Alle Kinosäle anfordern
 //   _______________________________________________________________
 
@@ -64,7 +85,7 @@ app.put('/api/restplaetze/:showId', function (req, res) {
     { restplaetze: req.body.restplatz },
     { where: { id: req.params.showId } }
   ).then(function (result) {
-    console.log('Success:', result);
+    console.log('Success: ' + result);
   }).catch(function (error) {
     console.log(error);
   });

@@ -76,8 +76,6 @@ async function createReservierung () {
   const restplatz = gesuchteVorstellung.restplaetze - kinokarten;
   const id = gesuchteVorstellung.id;
 
-  // prüfen ob die Restplätze für die gebuchten tickets ausreichen
-
   // ---Paket packen
   const reservierung = { filmtitel, kinokarten, nameKunde };
   console.log(reservierung);
@@ -91,11 +89,8 @@ async function createReservierung () {
 
   });
 
-  // To-Do
-  // ticketsabziehen(kinokarten)
-
+  // DB mit den verbliebenen Sitzplätzen aktualisieren
   const restplaetze = { restplatz };
-  console.log('Objekt: ', restplaetze);
 
   window.fetch('/api/restplaetze/' + `${id}`, {
 
