@@ -260,7 +260,7 @@ async function createFormFromJSON (json) {
     // Kleiner roter Text, der bei ungültiger Eingabe angezeigt wird
     // Sofern ein Errortext für dieses Feld definiert ist, wird dieser angezeigt,
     // ansonsten wird der Placeholdertextangezeigt (siehe templates.js)
-    const tooltip = createElement('div', { class: 'invalid-tooltip', text: inputJSON.errorText || inputJSON.placeholder });
+    const tooltip = createElement('div', { class: 'invalid-tooltip', text: 'Pflichtfeld' });
 
     // Input und Tooltip müssen in ein Div mit bestimmten Bootstrapklassen gepackt werden
     const inputWrapper = createElement('div', { class: 'input-group has-validation' });
@@ -333,7 +333,7 @@ async function attachFormularEventlisteners () {
     // ------- Kinoname muss eindeutig sein -------
     const nameInput = document.getElementById('input-0');
     // Alle bereits verwendeten Kinonamen
-    const allCinemas = await getCinemas();
+    const allCinemas = await (await window.fetch('/api/getCinemas')).json();
     const occupiedNames = allCinemas.map(cinema => cinema.kinoname);
     const eventListenerName = function (event) {
       const element = event.target;
@@ -359,7 +359,8 @@ async function attachFormularEventlisteners () {
     // ------- Vorstellungsname muss eindeutig sein -------
     const nameInput = document.getElementById('input-0');
     // Alle bereits verwendetenVorstellungsnamen
-    const allShows = await getShows();
+    const allShows = await (await window.fetch('/api/getShows')).json();
+    console.log(allShows);
     const occupiedNames = allShows.map(show => show.filmname);
     const eventListener = function (event) {
       const element = event.target;
@@ -379,8 +380,8 @@ async function attachFormularEventlisteners () {
     const attachTicketCountValidator = async function (_event) {
       // Anzahl Restplätze für aktuell ausgewählte Vorstellung abfragen
       const dropdown = document.getElementById('input-1');
+      const allShows = await (await window.fetch('/api/getShows')).json();
       const currentShowName = dropdown.value;
-      const allShows = await getShows();
       const currentShow = allShows.find(show => show.filmname === currentShowName);
       const maxTickets = currentShow.restplaetze;
 
@@ -405,12 +406,12 @@ async function attachFormularEventlisteners () {
       refreshEvent(ticketInput, eventListener, 'input');
     };
 
-    // Validierfunktion initial setzen
-    attachTicketCountValidator();
-
     // ------- Wahl von neuer Vorstellung im Dropdown muss Validierungsfunktion von AnzahlTickets neu setzen -------
     const dropdown = document.getElementById('input-1');
     refreshEvent(dropdown, attachTicketCountValidator, 'change');
+
+    // Validierfunktion initial setzen
+    attachTicketCountValidator();
   }
 }
 
