@@ -167,7 +167,6 @@ async function switchSite (newSite) {
     return;
   }
 
-  const formularWrapper = document.getElementById('formular');
   // Alten Inhalt entfernen
   clearCurrentSite();
   // Neuer Seitenwert in globalen Variablen hinterlegen
@@ -179,8 +178,17 @@ async function switchSite (newSite) {
   } else if (newSite === SITE.KINOSÄLE_ANZEIGEN) {
     await loadRoomList();
   } else {
+    // Formular (ohne Dropdown-Options) laden und einfügen
     const form = await createFormFromJSON(FORMULAR_TEMPLATES[newSite]);
+    const formularWrapper = document.getElementById('formular');
     addElement(formularWrapper, form);
+
+    // Mögliche Dropdowns befüllen
+    if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
+      loadShows();
+    } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
+      loadCinemas();
+    }
   }
 
   // Formular-Eventlistener anhängen
@@ -224,11 +232,6 @@ async function createFormFromJSON (json) {
           id: inputID,
           required: inputJSON.required
         });
-        if (CURRENTSIDE === SITE.TICKETS_RESERVIEREN) {
-          loadShows();
-        } else if (CURRENTSIDE === SITE.VORSTELLUNG_ANLEGEN) {
-          loadCinemas();
-        }
         break;
       case 'number':
         input = createElement('input', {
