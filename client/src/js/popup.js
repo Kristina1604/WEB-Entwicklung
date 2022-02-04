@@ -124,4 +124,6 @@ function closePopup (_event) {
   window.removeEventListener('resize', adjustPopupPosition);
 }
 
-module.exports = togglePopup;
+module.exports = {
+  togglePopup: togglePopup
+};
