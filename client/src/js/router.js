@@ -1,3 +1,9 @@
+/**
+ * -----------------------------------------------------------------------------
+ * Koordiniert den Seitenwechsel und das Laden/Löschen des Kontent-Bereichs
+ * -----------------------------------------------------------------------------
+ */
+
 const { addElement } = require('./helpers/domHelper.js');
 const {
   SITE,

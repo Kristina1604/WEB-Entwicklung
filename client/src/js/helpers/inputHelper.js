@@ -1,5 +1,8 @@
-// Kümmert sich um das Auslesen und Leeren der Inputfelder
-
+/**
+ * -----------------------------------------------------------------------------
+ * Kümmert sich um das Auslesen und Leeren der Inputfelder (nicht überall verwendet)
+ * -----------------------------------------------------------------------------
+ */
 /**
  * Gibt Array aller aktuellen Inputelemente zurück
  * @returns {Array<HTMLElement>}

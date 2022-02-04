@@ -1,3 +1,8 @@
+/**
+ * -----------------------------------------------------------------------------
+ * Hilfsfunktionen zum Laden/Einfügen von Serverdaten (wird nicht überall verwendet)
+ * -----------------------------------------------------------------------------
+ */
 
 // Vorstellungen anfordern und Drop-Down Menü füllen
 async function loadShows () {

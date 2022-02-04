@@ -1,3 +1,9 @@
+/**
+ * -----------------------------------------------------------------------------
+ * Erstellt QR-Code basierend auf einem InputString
+ * -----------------------------------------------------------------------------
+ */
+
 const {
   createElement, addElement
 } = require('./helpers/domHelper.js');

@@ -1,3 +1,8 @@
+/**
+ * -----------------------------------------------------------------------------
+ * Bietet bessere Funktionalität zum Erstellen/Ändern/Löschen von DOM-Elementen
+ * -----------------------------------------------------------------------------
+ */
 
 /**
  * Erzeugt neues Element, optional direkt mit Klassen, Styles oder sonstigen Attributen
