@@ -1,0 +1,83 @@
+
+  @primaryButtons: black;
+  @primaryButtonOpen:black;
+
+  @subButtonColor: black;
+
+  @inputFieldColor: rgb(255, 244, 223);
+  @inputFieldFont: black;//rgb(255, 166, 0);
+
+
+   //Die beiden Hauptbuttons 'Betreiber' und 'Kunde'
+  .primaryButton {
+    display: table;
+    width:90%;
+    height:3em;
+    background-color: @white;
+    border-radius: 3px;
+    text-align: center;
+    margin-left: 5%;
+    margin-top:10px;
+    color: @primaryButtons;
+    box-sizing: border-box;
+    box-shadow: none;
+  }
+  .primaryButton:hover{
+    background-color: @subButtonColor;
+    color:@white;
+    border: 2px solid @white;
+    box-shadow: none;
+  }
+
+  //Geöffneter Hauptbutton
+  .openPrimaryButton {
+    background-color: @primaryButtonOpen;
+    border: 2px solid @yellow;
+    color: @yellow;
+  }
+
+  //Das Anklicken der <p>-Tags zu verhindern macht den js-Code etwas einfachen
+  //(toggleMenu() kann dann einfacher herausfinden, welcher Hauptbutton gedrückt wurde)
+  //Ansonsten keine Funktion
+  #navleiste > div > div > p  {
+    pointer-events: none;
+  }
+
+
+  //Unterbuttons
+  .oSubButton, .cSubButton {
+    text-align: center;
+    color:@white;
+    width:90%;
+    margin-left: 5%;
+    background-color: @subButtonColor;
+  }
+  .oSubButton:hover, .cSubButton:hover {
+    background-color: @subButtonColor;
+    color:@white;
+    text-decoration: underline;
+    text-decoration-color: @yellow;
+ }
+
+  .inputField {
+    background-color: @inputFieldColor;
+    color: @inputFieldFont;  
+  }
+
+  
+
+
+  //Style für Unterbuttons + Übergang
+  @button-transitionTime: .05s;
+  .inactive {
+    height: 0;
+    display: hidden;
+    font-size: 0;
+    transition: height @button-transitionTime
+  }
+  .active {
+    height: 2em;
+    font-size: 100%;
+    transition: height @button-transitionTime, font-size @button-transitionTime;
+  }
+

@@ -1,0 +1,43 @@
+//Diese Variablen können beliebig angepasst werden
+  //Solange git: wrapper-height > ueberschrift-height && wrapper-width > navleiste-width
+  @margin-top:50px;
+  @wrapper-width:1000px;
+  @caption-height:100px;
+  @navbar-width:250px;
+  @border-outer:2px;
+  @border-inner:1px;
+  @border-color: white;
+
+
+  #wrapper {
+    //Alles umschließendes DIV
+    margin: auto;
+    margin-top:@margin-top;
+    width: @wrapper-width;
+    box-sizing: border-box;
+    border: @border-outer solid @border-color;
+    color: @fontColor;
+  }
+  #ueberschrift {
+    //Oberer horizontaler Balken für Überschrift
+    height: @caption-height - @border-outer - @border-inner;
+    width: @wrapper-width - (2*@border-outer);
+    box-sizing: border-box;
+    border-bottom: @border-inner solid @border-color;
+  }
+  #inhalt {
+    //Umschließendes unteres Element. Enthält Navleiste und Contentfeld
+    display: flex;
+    width: @wrapper-width - (2*@border-outer);
+  }
+  #navleiste {
+    //Navleiste links
+    width: @navbar-width;
+    box-sizing: border-box;
+    border-right: @border-inner solid @border-color;
+  }
+
+  #formular {
+    //Contentbereich für z.B Inputfelder, Listen und vielem mehr
+    width: @wrapper-width - @navbar-width
+  }
