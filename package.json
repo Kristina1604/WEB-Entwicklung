@@ -9,7 +9,7 @@
     "lint": "echo '=> linting files' && semistandard client/src/js/**.js && semistandard server/main.js",
     "html": "echo '=> creating html file' && cp client/src/index.html _dist/",
     "css": "echo '=> converting less to css' &&  lessc client/src/styles/style.less _dist/styles/style.css",
-    "js": "echo '=> bundle js files' && browserify client/src/js/betreiber.js -o _dist/js/main.js",
+    "js": "echo '=> bundle js files' && browserify client/src/js/index.js -o _dist/js/main.js",
     "minify": "echo '=> minify js and css files' && terser _dist/js/main.js -o _dist/js/main.js && css-minify -d _dist/styles/ -o _dist/styles/",
     "clean": "echo '=> cleaning project' && rm -rf node_modules && npm run cleardist",
     "build": "echo '=> building project' && npm run lint && npm run cleardist && npm run html &&  npm run css && npm run js && npm run minify",
