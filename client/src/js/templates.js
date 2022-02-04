@@ -1,7 +1,7 @@
 // ********************
 // **Seitennavigation**
 // ********************
-// Objekt um Enumwerte für currentSide zu imitieren
+// Objekt um Enumwerte für currentSite zu imitieren
 // Werte müssen den zugehörigen IDs der Buttons in der NavBar entsprechen
 const SITE = {
   EMPTY: 'leer',
