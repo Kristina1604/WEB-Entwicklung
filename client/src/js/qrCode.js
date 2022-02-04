@@ -1,6 +1,6 @@
 const {
   createElement, addElement
-} = require('./domHelper.js');
+} = require('./helpers/domHelper.js');
 
 function createQrDiv (dataObject) {
   const QRCode = require('qrcode');

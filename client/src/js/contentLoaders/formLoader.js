@@ -4,8 +4,8 @@ const {
   removeClass,
   addElement,
   addElements
-} = require('./domHelper.js');
-const { SITE } = require('./templates.js');
+} = require('../helpers/domHelper.js');
+const { SITE } = require('../templates.js');
 
 /**
  * Erstellt <form>-Element aus Datenobjekt
@@ -139,7 +139,7 @@ async function attachFormularEventlisteners () {
     // Neuen Listener setzen
     replacedElement.addEventListener(eventName, fn);
   };
-  const currentSite = require('./router.js').getCurrentSite();
+  const currentSite = require('../router.js').getCurrentSite();
   // ------- Eigentliches Programm -------
   if (currentSite === SITE.KINOSAAL_ANLEGEN) {
     // ------- Kinoname muss eindeutig sein -------
@@ -245,7 +245,7 @@ async function handleSubmitClick (event) {
   };
   // Alle Sonderbedingungen (Eindeutige Namen, Tickets verfügbar) müssen erfüllt sein
   const checkSpecialConditionsStatus = function () {
-    const allInputs = require('./inputManager.js').getInputs();
+    const allInputs = require('../helpers/inputHelper.js').getInputs();
     return allInputs.every(input => !input.classList.contains('is-invalid'));
   };
   // Boolean, ob Bedingungen erfüllt
@@ -270,19 +270,19 @@ async function handleSubmitClick (event) {
  * Event, wenn auf den Absendbutton eines Formulars geklickt wurde
  */
 async function startSubmit () {
-  const currentSite = require('./router.js').getCurrentSite();
+  const currentSite = require('../router.js').getCurrentSite();
   switch (currentSite) {
     case SITE.VORSTELLUNG_ANLEGEN:
-      require('./popup.js').togglePopup(currentSite);
-      await require('./sendData.js').createVorstellung();
+      require('../popup.js').togglePopup(currentSite);
+      await require('../api/sendData.js').createVorstellung();
       break;
     case SITE.KINOSAAL_ANLEGEN:
-      require('./popup.js').togglePopup(currentSite);
-      await require('./sendData.js').createKinosaal();
+      require('../popup.js').togglePopup(currentSite);
+      await require('../api/sendData.js').createKinosaal();
       break;
     case SITE.TICKETS_RESERVIEREN:
-      require('./popup.js').togglePopup(currentSite);
-      await require('./sendData.js').createReservierung();
+      require('../popup.js').togglePopup(currentSite);
+      await require('../api/sendData.js').createReservierung();
       break;
     default:
       console.log('Error');

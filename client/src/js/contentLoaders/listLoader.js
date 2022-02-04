@@ -1,7 +1,7 @@
 const {
   SITE
-} = require('./templates.js');
-const { getCurrentSite } = require('./router.js');
+} = require('../templates.js');
+const { getCurrentSite } = require('../router.js');
 
 // Alle Breakpoints in Pixeln (kann beliebig erweitert/geändert werden)
 const LISTHEIGHT_BREAKPOINTS = [500, 600];

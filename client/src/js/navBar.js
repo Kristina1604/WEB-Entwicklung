@@ -1,7 +1,7 @@
 const {
   addClass,
   removeClass
-} = require('./domHelper.js');
+} = require('./helpers/domHelper.js');
 const { switchSite } = require('./router.js');
 
 const initNavBar = function () {

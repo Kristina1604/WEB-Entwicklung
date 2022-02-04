@@ -4,11 +4,11 @@ const {
   addElement,
   addElements,
   addClass
-} = require('./domHelper.js');
+} = require('./helpers/domHelper.js');
 
 const { SITE } = require('./templates.js');
 const { createQrDiv } = require('./qrCode.js');
-const { clearInputs } = require('./inputManager.js');
+const { clearInputs } = require('./helpers/inputHelper.js');
 /**
  * Öffnet die Popupansicht (also ausgegrauter Hintergrund und Popup)
  * @param {String} currentSite Aktuelle Seite, damit die Funktion weiß, welches Popup geladen werden soll
