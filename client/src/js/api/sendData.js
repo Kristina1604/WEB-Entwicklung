@@ -9,7 +9,7 @@
 //                      Neue Vorstellung eintragen
 //   _______________________________________________________________
 
-async function createVorstellung () {
+async function createPresentation () {
   // Daten lesen aus Inputfeldern
   const filmName = document.getElementById('input-0').value;
   const kinoSaal = document.getElementById('input-1').value;
@@ -27,7 +27,7 @@ async function createVorstellung () {
   // ---Paket packen
   const vorstellung = { filmName, kinoSaal, zeit, kalendertag, restplaetze };
 
-  window.fetch('/addVorstellung', {
+  window.fetch('/addPresentation', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ async function createVorstellung () {
 //                      Neuen Kinosaal eintragen
 //   _______________________________________________________________
 
-async function createKinosaal () {
+async function createCinemaRoom () {
   const kinoName = document.getElementById('input-0').value;
   const sitzreihen = document.getElementById('input-1').value;
   const sitzeplätze = document.getElementById('input-2').value;
@@ -51,7 +51,7 @@ async function createKinosaal () {
 
   const kinosaal = { kinoName, sitzreihen, sitzeplätze, sitzeKomplett };
 
-  window.fetch('/addKinosaal', {
+  window.fetch('/addCinemaRoom', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ async function createKinosaal () {
 //                      Neue Reservierung eintragen
 //   _______________________________________________________________
 
-async function createReservierung () {
+async function createReservation () {
   // Daten lesen aus Inputfeldern
   const nameKunde = document.getElementById('input-0').value;
   const filmtitel = document.getElementById('input-1').value;
@@ -83,7 +83,7 @@ async function createReservierung () {
   // ---Paket packen
   const reservierung = { filmtitel, kinokarten, nameKunde };
 
-  window.fetch('/addReservierung', {
+  window.fetch('/addReservation', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -105,6 +105,6 @@ async function createReservierung () {
   });
 }
 
-exports.createVorstellung = createVorstellung;
-exports.createKinosaal = createKinosaal;
-exports.createReservierung = createReservierung;
+exports.createPresentation = createPresentation;
+exports.createCinemaRoom = createCinemaRoom;
+exports.createReservation = createReservation;

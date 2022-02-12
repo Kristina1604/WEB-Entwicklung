@@ -279,15 +279,15 @@ async function startSubmit () {
   switch (currentSite) {
     case SITE.VORSTELLUNG_ANLEGEN:
       require('../popup.js').togglePopup(currentSite);
-      await require('../api/sendData.js').createVorstellung();
+      await require('../api/sendData.js').createPresentation();
       break;
     case SITE.KINOSAAL_ANLEGEN:
       require('../popup.js').togglePopup(currentSite);
-      await require('../api/sendData.js').createKinosaal();
+      await require('../api/sendData.js').createCinemaRoom();
       break;
     case SITE.TICKETS_RESERVIEREN:
       require('../popup.js').togglePopup(currentSite);
-      await require('../api/sendData.js').createReservierung();
+      await require('../api/sendData.js').createReservation();
       break;
     default:
       console.log('Error');
