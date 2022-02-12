@@ -95,13 +95,6 @@ async function loadPresentationList () {
       break;
   }
 
-  // Ab hier müsste dir alles bekannt vorkommen
-  // Die einzigen Unterschiede ab jetzt sind
-  // 1. Die Verwendung der oben definierten Variablen (entriesPerSite,fetchPath,...),
-  // um die 3 Fälle (small, medium, large) unterscheiden zu können
-  // 2. Die removeListpageButtons-Funktion, die aber das selbe macht wie dein Code davor.
-  // Ich musste sie nur auslagern, um die Buttons auch beim Wechsel auf eine Formularseite entfernen zu können
-
   async function getData () {
     const page = 1;
     const response = await window.fetch(fetchPath + `${page}`);
@@ -219,13 +212,6 @@ async function loadRoomList () {
       additionalButtonClasses = '';
       break;
   }
-
-  // Ab hier müsste dir alles bekannt vorkommen
-  // Die einzigen Unterschiede ab jetzt sind
-  // 1. Die Verwendung der oben definierten Variablen (entriesPerSite,fetchPath,...),
-  // um die 3 Fälle (small, medium, large) unterscheiden zu können
-  // 2. Die removeListpageButtons-Funktion, die aber das selbe macht wie dein Code davor.
-  // Ich musste sie nur auslagern, um die Buttons auch beim Wechsel auf eine Formularseite entfernen zu können
 
   async function getData () {
     const page = 1;
