@@ -105,7 +105,6 @@ function getInputData () {
  * Es wird dann noch um einen festen Wert (marginTop) nach unten geschoben
  */
 function adjustPopupPosition () {
-  console.log('adjust');
   // X- bzw Y-Wert der view Ränder des Formularelements
   const formularEdges = document.getElementById('formular').getBoundingClientRect();
 

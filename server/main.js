@@ -98,9 +98,6 @@ app.put('/api/restplaetze/:showId', function (req, res) {
 
 // Kinosaal anlegen
 app.post('/addKinosaal', function (req, res) {
-  console.log('i got a request!');
-  console.log(req.body);
-
   Model.Kinosaal.create({
 
     kinoname: req.body.kinoName,
@@ -113,9 +110,6 @@ app.post('/addKinosaal', function (req, res) {
 
 // Vorstellung anlegen
 app.post('/addVorstellung', function (req, res) {
-  console.log('i got a request!');
-  console.log(req.body);
-
   Model.Vorstellung.create({
 
     filmname: req.body.filmName,
@@ -129,9 +123,6 @@ app.post('/addVorstellung', function (req, res) {
 
 // Reservierung anlegen
 app.post('/addReservierung', function (req, res) {
-  console.log('i got a request!');
-  console.log(req.body);
-
   Model.Reservierung.create({
 
     vorstellung: req.body.filmtitel,

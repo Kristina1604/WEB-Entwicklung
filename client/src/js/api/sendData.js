@@ -26,7 +26,6 @@ async function createVorstellung () {
 
   // ---Paket packen
   const vorstellung = { filmName, kinoSaal, zeit, kalendertag, restplaetze };
-  console.log(vorstellung);
 
   window.fetch('/addVorstellung', {
     method: 'POST',
@@ -51,7 +50,6 @@ async function createKinosaal () {
   const sitzeKomplett = sitzeplätze * sitzreihen;
 
   const kinosaal = { kinoName, sitzreihen, sitzeplätze, sitzeKomplett };
-  console.log(kinosaal);
 
   window.fetch('/addKinosaal', {
     method: 'POST',
@@ -84,7 +82,6 @@ async function createReservierung () {
 
   // ---Paket packen
   const reservierung = { filmtitel, kinokarten, nameKunde };
-  console.log(reservierung);
 
   window.fetch('/addReservierung', {
     method: 'POST',

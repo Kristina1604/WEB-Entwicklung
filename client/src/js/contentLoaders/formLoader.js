@@ -178,7 +178,6 @@ async function attachFormularEventlisteners () {
     const nameInput = document.getElementById('input-0');
     // Alle bereits verwendetenVorstellungsnamen
     const allShows = await (await window.fetch('/api/getShows')).json();
-    console.log(allShows);
     const occupiedNames = allShows.map(show => show.filmname);
     const eventListener = function (event) {
       const element = event.target;

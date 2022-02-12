@@ -100,8 +100,6 @@ async function loadPresentationList () {
     const response = await window.fetch(fetchPath + `${page}`);
     const data = await response.json();
 
-    console.log(data);
-
     function listItemTemplate (vorstellung) {
       return `
               <div class= "border border-info rounded flex-items-container">
@@ -181,7 +179,6 @@ async function loadPresentationList () {
  * Läd und aktualisiert Liste und Listenlayout für Kinosääle (Einträge pro Seite, Anzahl Seitenbuttons)
  */
 async function loadRoomList () {
-  console.log('loadRoomList');
   // Die Funktionen für die verschiedenen Layouts unterscheiden sich nur in wenigen Punkten
   // Die Variablen dafür werden in den folgenden Zeilen definiert
   let entriesPerSite;
