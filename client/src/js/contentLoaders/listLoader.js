@@ -102,10 +102,10 @@ async function loadPresentationList () {
 
     function listItemTemplate (vorstellung) {
       return `
-              <div class= "border border-info rounded flex-items-container">
+              <div class= "border border-info rounded items-container">
                   <div class= "container-name"> ${vorstellung.filmname} </div>
-                  <div class="container-datum"> ${vorstellung.datum} </div> </br>
-                  <div class="container-info"> 
+                  <div class="container-datum"> ${vorstellung.datum} </div>
+                  <div> 
                     ${vorstellung.kinosaal} 
                     </br>
                     ${vorstellung.uhrzeit} Uhr 
@@ -152,12 +152,12 @@ async function loadPresentationList () {
         function listItemTemplate (vorstellung) {
           return `
 
-                    <div class= "border border-info rounded flex-items-container">
+                    <div class= "border border-info rounded items-container">
 
                         <div class= "container-name"> ${vorstellung.filmname} </div>
 
-                        <div class="container-datum"> ${vorstellung.datum} </div> </br>
-                        <div class="container-info"> 
+                        <div class="container-datum"> ${vorstellung.datum} </div>
+                        <div> 
                         ${vorstellung.kinosaal} 
                         </br>
                         ${vorstellung.uhrzeit} Uhr 
@@ -217,9 +217,9 @@ async function loadRoomList () {
 
     function listItemTemplate (kino) {
       return `
-              <div class= "border border-info rounded flex-items-container">
+              <div class= "border border-info rounded items-container">
                   <div class= "container-name"> ${kino.kinoname} </div>
-                  <div class="container-info">
+                  <div>
                     Sitzreihen: ${kino.sitzreihen}
                     </br>
                     Sitze pro Sitzreihe: ${kino.sitze}
@@ -265,9 +265,9 @@ async function loadRoomList () {
 
         function listItemTemplate (kino) {
           return `
-                  <div class= "border border-info rounded flex-items-container">
+                  <div class= "border border-info rounded items-container">
                       <div class= "container-name"> ${kino.kinoname} </div>
-                      <div class="container-info">
+                      <div>
                         Sitzreihen: ${kino.sitzreihen}
                         </br>
                         Sitze pro Sitzreihe: ${kino.sitze}

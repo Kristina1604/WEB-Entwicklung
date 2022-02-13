@@ -1,7 +1,6 @@
 
-.flex-items-container{
-    display: flex;
-    flex-direction: column;
+// Umschließendes div für jede Vorstellung 
+.items-container{
     background-color: @background;
     box-shadow: 0px 5px 10px @yellow;
     border-color: @yellow;
@@ -12,40 +11,25 @@
     padding-bottom: 1.5%;
     padding-right: 25%;
     padding-left: 25%;
-    // background-color:darkorchid;
   }
-  
+
+  // Container für den Namen der Vorstellung
   .container-name{
-    display: flex;
     font-family:cursive;
     font-size: 1.5rem;
-    // background-color: brown;
-    // flex-grow: 1;
-  
   }
   
+  // Container für das Datum der Vorstellung
   .container-datum{
-    display: flex;
-    font-size: 0.8rem;
-  
-    // background-color: blue;
-    
+    font-size: 0.8rem;   
   }
-  
-  .container-info{
-    display: flex;
-    // background-color: rgb(255, 0, 200);
-    
-  }
-  
+
+  // Container für Buttons mittig ausrichten 
   .buttonContainer{
-  
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
   }
   
+  // Bei einer minimalen Größe des Browserfensters verschiebt sich der Button Container um 2% nach unten 
   #divButtonsSmall{
     margin-top:2%;
   }
