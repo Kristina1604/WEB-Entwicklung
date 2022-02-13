@@ -1,23 +1,21 @@
-// load express module
-const express = require('express');
 
-// erzeugen eines application objects durch den Aufruf der top level function von express
+const express = require('express');
+const db = require('../config/database.js');
+const Model = require('../model/Model');
+
 const app = express();
 
+// Zugriff auf das übergebene Kommandozeilenargument
 const args = process.argv;
 const PORT = args[2];
 
-// statische Dateien bereit stellen, mit der Middelwarefunktion express.static
+// Statische Dateien werden mit Hilfe der Middelwarefunktion express.static an den
+// browser ausgeliefert
 app.use(express.static('_dist'));
 
 app.use(express.json());
 
-// Database
-const db = require('../config/database.js');
-
-const Model = require('../model/Model');
-
-// Verbindung zur DB testen mit Hilfe der Methode .authenticate()
+// Verbindung zur DB testen mit der Methode authenticate()
 db.authenticate().then(function () {
   console.log('connected!');
 }).catch(function (error) {
@@ -26,14 +24,14 @@ db.authenticate().then(function () {
 
 //   _______________________________________________________________
 //
-//                    Vorstellungen ins Drop-Down laden
+//      Vorstellungen/Kinosäle für die Drop-Down Menüs anfordern
 //   _______________________________________________________________
 
 app.get('/api/loadShows', function (req, res) {
   Model.Vorstellung.findAll({
     attributes: ['filmname']
-  }).then(function (vorstellungs) {
-    res.json(vorstellungs);
+  }).then(function (vorstellungen) {
+    res.json(vorstellungen);
   });
 });
 
@@ -51,12 +49,8 @@ app.get('/api/loadCinemas', function (req, res) {
 //   _______________________________________________________________
 
 app.get('/api/getCinemas', function (req, res) {
-  Model.Kinosaal.findAll({
-
-  }).then(function (kinos) {
+  Model.Kinosaal.findAll().then(function (kinos) {
     res.json(kinos);
-  }).catch(function (error) {
-    console.log(error);
   });
 });
 
@@ -66,28 +60,22 @@ app.get('/api/getCinemas', function (req, res) {
 //   _______________________________________________________________
 
 app.get('/api/getShows', function (req, res) {
-  Model.Vorstellung.findAll({
-
-  }).then(function (vorstellungs) {
-    res.json(vorstellungs);
-  }).catch(function (error) {
-    console.log(error);
+  Model.Vorstellung.findAll().then(function (vorstellungen) {
+    res.json(vorstellungen);
   });
 });
 
 //   _______________________________________________________________
 //
-//                      Restplätze updaten
+//                   Restplätze in der DB updaten
 //   _______________________________________________________________
 
 app.put('/api/restplaetze/:showId', function (req, res) {
   Model.Vorstellung.update(
     { restplaetze: req.body.restplatz },
     { where: { id: req.params.showId } }
-  ).then(function (result) {
-    console.log('Success: ' + result);
-  }).catch(function (error) {
-    console.log(error);
+  ).then(function () {
+    res.status(204).send('successful request');
   });
 });
 
@@ -105,6 +93,8 @@ app.post('/addCinemaRoom', function (req, res) {
     sitze: req.body.sitzeplätze,
     gesamtsitze: req.body.sitzeKomplett
 
+  }).then(function () {
+    res.send('successful');
   });
 });
 
@@ -118,6 +108,8 @@ app.post('/addPresentation', function (req, res) {
     datum: req.body.kalendertag,
     restplaetze: req.body.restplaetze
 
+  }).then(function () {
+    res.send('successful');
   });
 });
 
@@ -128,6 +120,9 @@ app.post('/addReservation', function (req, res) {
     vorstellung: req.body.filmtitel,
     tickets: req.body.kinokarten,
     kundenname: req.body.nameKunde
+
+  }).then(function () {
+    res.send('successful');
   });
 });
 
@@ -136,7 +131,7 @@ app.post('/addReservation', function (req, res) {
 //                    Paginierung von Vorstellungen
 //   _______________________________________________________________
 
-// Berechnung der Seite large
+// Neuberechnung bei Browsergröße "large"
 app.get('/api/presentation/large/:page', function (req, res) {
   const LIMIT = 3;
 
@@ -144,14 +139,12 @@ app.get('/api/presentation/large/:page', function (req, res) {
   Model.Vorstellung.findAndCountAll({
     offset: (num - 1) * LIMIT,
     limit: LIMIT
-  }).then(function (vorstellungs) {
-    res.json(vorstellungs);
-  }).catch(function (error) {
-    console.log(error);
+  }).then(function (vorstellungen) {
+    res.json(vorstellungen);
   });
 });
 
-// Berechnung der Seite medium
+// Neuberechnung bei Browsergröße "medium"
 app.get('/api/presentation/medium/:page', function (req, res) {
   const LIMIT = 2;
 
@@ -159,14 +152,12 @@ app.get('/api/presentation/medium/:page', function (req, res) {
   Model.Vorstellung.findAndCountAll({
     offset: (num - 1) * LIMIT,
     limit: LIMIT
-  }).then(function (vorstellungs) {
-    res.json(vorstellungs);
-  }).catch(function (error) {
-    console.log(error);
+  }).then(function (vorstellungen) {
+    res.json(vorstellungen);
   });
 });
 
-// Berechnung der Seite small
+// Neuberechnung bei Browsergröße "small"
 app.get('/api/presentation/small/:page', function (req, res) {
   const LIMIT = 1;
 
@@ -174,10 +165,8 @@ app.get('/api/presentation/small/:page', function (req, res) {
   Model.Vorstellung.findAndCountAll({
     offset: (num - 1) * LIMIT,
     limit: LIMIT
-  }).then(function (vorstellungs) {
-    res.json(vorstellungs);
-  }).catch(function (error) {
-    console.log(error);
+  }).then(function (vorstellungen) {
+    res.json(vorstellungen);
   });
 });
 
@@ -186,7 +175,7 @@ app.get('/api/presentation/small/:page', function (req, res) {
 //                    Paginierung von Kinosälen
 //   _______________________________________________________________
 
-// Berechnung der Seite large
+// Neuberechnung bei Browsergröße "large"
 app.get('/api/cinemaRoom/large/:page', function (req, res) {
   const LIMIT = 3;
 
@@ -196,12 +185,10 @@ app.get('/api/cinemaRoom/large/:page', function (req, res) {
     limit: LIMIT
   }).then(function (kinos) {
     res.json(kinos);
-  }).catch(function (error) {
-    console.log(error);
   });
 });
 
-// Berechnung der Seite medium
+// Neuberechnung bei Browsergröße "medium"
 app.get('/api/cinemaRoom/medium/:page', function (req, res) {
   const LIMIT = 2;
 
@@ -211,12 +198,10 @@ app.get('/api/cinemaRoom/medium/:page', function (req, res) {
     limit: LIMIT
   }).then(function (kinos) {
     res.json(kinos);
-  }).catch(function (error) {
-    console.log(error);
   });
 });
 
-// Berechnung der Seite small
+// Neuberechnung bei Browsergröße "small"
 app.get('/api/cinemaRoom/small/:page', function (req, res) {
   const LIMIT = 1;
 
@@ -226,18 +211,15 @@ app.get('/api/cinemaRoom/small/:page', function (req, res) {
     limit: LIMIT
   }).then(function (kinos) {
     res.json(kinos);
-  }).catch(function (error) {
-    console.log(error);
   });
 });
 
-// Abfangen von falschen URI's
+// Abfangen von fehlerhaften URI's
 app.use(function (req, res) {
-  res.status(404).send('<h1>Error 404 - Hier gibts nichts zu sehen ;)<h1>');
+  res.status(404).send('<h1>Error 404 - Hier gibts nichts zu sehen ;D<h1>');
 });
 
 // Starten des Servers an Port 8080
-
-app.listen(PORT || 3000, function () {
-  console.log('Server running on port: ' + this.address().port);
+app.listen(PORT, function () {
+  console.log('Server is running on port: ' + PORT);
 });
